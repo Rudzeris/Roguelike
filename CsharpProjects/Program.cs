@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Diagnostics.SymbolStore;
+using System.Numerics;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 namespace Rogalic
@@ -18,8 +20,8 @@ namespace Rogalic
 
 class Game
 {
-    public GameObject? player;
-    private Map? myMap;
+    public Player player;
+    private Map myMap;
     byte fps = 20;
     string str = "";
     bool exit = false;
@@ -47,6 +49,19 @@ class Game
         if (!exit) Update();
     }
 
+    private void MovePlayer(int x, int y)
+    {
+        if (player == null) return;
+        Position pos = player.GetPosition();
+        pos.x += x;
+        pos.y += y;
+        if (itsEmpty(pos))
+        {
+            myMap.Move(player.GetPosition(), pos, player);
+            player.Move(pos);
+        }
+    }
+
     private void KeyDownFunction(ConsoleKey key)
     {
         switch (key)
@@ -54,31 +69,46 @@ class Game
             case ConsoleKey.Escape:
                 exit = true;
                 break;
+            case ConsoleKey.Enter:
+                SpawnPlayer();
+                break;
             case ConsoleKey.W:
-
+                MovePlayer(-1, 0);
                 break;
             case ConsoleKey.S:
-
+                MovePlayer(1, 0);
                 break;
             case ConsoleKey.A:
-
+                MovePlayer(0, -1);
                 break;
             case ConsoleKey.D:
-
+                MovePlayer(0, 1);
                 break;
         }
+    }
+    public bool itsEmpty(Position newPosition)
+    {
+        if(myMap == null) return false;
+        return myMap.itsEmpty(newPosition);
+    }
+    public void SpawnPlayer()
+    {
+        if(player==null) player = new Player();
+        player.Move(myMap.SpawnPlayer(player));
     }
 }
 
 class Map
 {
-    GameObject[,]? map;
+    GameObject[,] map;
+    Position spawnPlayer;
     public int n;
     public int m;
     public void Create()
     {
         n = 10;
         m = 20;
+        spawnPlayer = new Position(n/2,m/2);
         map = new GameObject[n, m];
         for (int i = 1; i < n - 1; i++)
         {
@@ -98,10 +128,30 @@ class Map
         {
             for (int j = 0; j < m; j++)
             {
-                Console.Write(map[i, j].GetSym());
+                Console.Write(map[i,j].GetSym());
             }
             Console.WriteLine();
         }
+    }
+
+    public bool itsEmpty(Position newPosition)
+    {
+        if(Empty.GetSymSt() == map[newPosition.x,newPosition.y].GetSym())
+        {
+            return true;
+        }
+        return false;
+    }
+    public void Move(Position oldPos, Position newPos, GameObject player)
+    {
+        if (newPos.x >= n || newPos.y >= m) return;
+        map[oldPos.x, oldPos.y] = map[newPos.x, newPos.y];
+        map[newPos.x, newPos.y] = player;
+    }
+    public Position SpawnPlayer(GameObject player)
+    {
+        map[spawnPlayer.x, spawnPlayer.y] = player;
+        return spawnPlayer;
     }
 }
 
@@ -122,6 +172,19 @@ abstract class GameObject
 
 class Empty : GameObject
 {
+    protected static char symSt;
+    public Empty()
+    {   
+        sym = '.';
+    }
+    static Empty()
+    {
+        symSt = '.';
+    }
+    public static char GetSymSt()
+    {
+        return symSt;
+    }
 }
 
 class Wall : GameObject
@@ -138,12 +201,34 @@ class Player : GameObject
 {
     string nickName = "player";
     float hp;
-    int x, y;
+    Position position;
 
     public Player()
     {
+        sym = 'P';
         hp = 100;
+        position = new Position();
     }
-    //public Move
+    public void Create(Position position)
+    {
+        this.position = position;
+    }
+    public void Move(Position newPosition){
+        position = newPosition;
+    }
+    public Position GetPosition()
+    {
+        return position;
+    }
+}
 
+struct Position
+{
+    public int x, y;
+    public Position(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+    
 }
