@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics.SymbolStore;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -21,10 +22,12 @@ namespace Rogalic
 class Game
 {
     public Player player;
+    public List<Enemy> enemy;
     private Map myMap;
     byte fps = 20;
-    string str = "";
+    string str = "HP: ";
     bool exit = false;
+    public Random rng = new Random();
     public void SetFPS(byte fps)
     {
         if (fps < 5 || fps > 240) this.fps = 20;
@@ -34,7 +37,6 @@ class Game
     {
         myMap = new Map();
         myMap.Create();
-
     }
 
     public void Update()
@@ -44,9 +46,38 @@ class Game
         myMap.Show();
         if (Console.KeyAvailable)
             KeyDownFunction(Console.ReadKey(true).Key);
-        Console.WriteLine(str);
+        Console.WriteLine(str+player?.hp.ToString());
 
         if (!exit) Update();
+    }
+
+    private void SpawnEnemy()
+    {
+        if(myMap == null) return;
+        if(enemy==null) enemy = new List<Enemy>();
+        int q = 2;
+        for (int i = 0; i < q; i++)
+            enemy.Add(new Enemy());
+        int n = myMap.n;
+        int m = myMap.m;
+        Position position = new Position();
+        //for (int w = 0;w < n; w+=4)
+        //{
+        //    for (int i = w; i < w+4 && i < n; i++)
+        //    {
+        //    }
+        //}
+    }
+    
+
+    static int GenerateDigit(Random rng)
+    {
+        return rng.Next(10);
+    }
+
+    private void MoveEnemy()
+    {
+
     }
 
     private void MovePlayer(int x, int y)
@@ -71,6 +102,7 @@ class Game
                 break;
             case ConsoleKey.Enter:
                 SpawnPlayer();
+                SpawnEnemy();
                 break;
             case ConsoleKey.W:
                 MovePlayer(-1, 0);
@@ -91,10 +123,13 @@ class Game
         if(myMap == null) return false;
         return myMap.itsEmpty(newPosition);
     }
+    // Создать класс который добавляет на карту персонажа
+    // принимает метод создания объекта, создает объект и добавляет объект в map справочник GameObject
+    // и вернуть сам объект
     public void SpawnPlayer()
     {
         if(player==null) player = new Player();
-        player.Move(myMap.SpawnPlayer(player));
+        player.Create(myMap.SpawnPlayer(player)); // -получает Position и отдает в player
     }
 }
 
@@ -102,8 +137,8 @@ class Map
 {
     GameObject[,] map;
     Position spawnPlayer;
-    public int n;
-    public int m;
+    public int n { get; private set; }
+    public int m { get; private set; }
     public void Create()
     {
         n = 10;
@@ -136,12 +171,14 @@ class Map
 
     public bool itsEmpty(Position newPosition)
     {
-        if(Empty.GetSymSt() == map[newPosition.x,newPosition.y].GetSym())
+        if (newPosition.x >= n || newPosition.y >= m) return false;
+        if (Empty.GetSymSt() == map[newPosition.x,newPosition.y].GetSym())
         {
             return true;
         }
         return false;
     }
+    
     public void Move(Position oldPos, Position newPos, GameObject player)
     {
         if (newPos.x >= n || newPos.y >= m) return;
@@ -197,20 +234,15 @@ class Wall : GameObject
     }
 }
 
-class Player : GameObject
+abstract class Person : GameObject
 {
-    string nickName = "player";
-    float hp;
-    Position position;
+    public uint maxHP { get; protected set; }
+    public uint hp { get; protected set; }
+    public Position position { get; protected set; }
 
-    public Player()
+    public void Create(Position position) // В конструктор
     {
-        sym = 'P';
-        hp = 100;
-        position = new Position();
-    }
-    public void Create(Position position)
-    {
+        hp = maxHP;
         this.position = position;
     }
     public void Move(Position newPosition){
@@ -219,6 +251,26 @@ class Player : GameObject
     public Position GetPosition()
     {
         return position;
+    }
+}
+
+class Player : Person
+{
+    public Player()
+    {
+        sym = 'P';
+        tag = "Player";
+        maxHP = 4;
+    }
+}
+
+class Enemy : Person
+{
+    public Enemy()
+    {
+        sym = 'X';
+        tag = "Enemy";
+        maxHP = 1;
     }
 }
 
