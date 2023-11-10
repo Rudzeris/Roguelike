@@ -46,15 +46,15 @@ class Game
         myMap.Show();
         if (Console.KeyAvailable)
             KeyDownFunction(Console.ReadKey(true).Key);
-        Console.WriteLine(str+player?.hp.ToString());
+        Console.WriteLine(str + player?.hp.ToString());
 
         if (!exit) Update();
     }
 
     private void SpawnEnemy()
     {
-        if(myMap == null) return;
-        if(enemy==null) enemy = new List<Enemy>();
+        if (myMap == null) return;
+        if (enemy == null) enemy = new List<Enemy>();
         int q = 2;
         for (int i = 0; i < q; i++)
             enemy.Add(new Enemy());
@@ -68,7 +68,7 @@ class Game
         //    }
         //}
     }
-    
+
 
     static int GenerateDigit(Random rng)
     {
@@ -120,7 +120,7 @@ class Game
     }
     public bool itsEmpty(Position newPosition)
     {
-        if(myMap == null) return false;
+        if (myMap == null) return false;
         return myMap.itsEmpty(newPosition);
     }
     // Создать класс который добавляет на карту персонажа
@@ -128,7 +128,7 @@ class Game
     // и вернуть сам объект
     public void SpawnPlayer()
     {
-        if(player==null) player = new Player();
+        if (player == null) player = new Player();
         player.Create(myMap.SpawnPlayer(player)); // -получает Position и отдает в player
     }
 }
@@ -137,23 +137,106 @@ class Map
 {
     GameObject[,] map;
     Position spawnPlayer;
+    Random rand = new Random();
     public int n { get; private set; }
     public int m { get; private set; }
     public void Create()
     {
-        n = 10;
-        m = 20;
-        spawnPlayer = new Position(n/2,m/2);
+        n = 13;
+        m = 25;
+        spawnPlayer = new Position(n / 2, m / 2);
         map = new GameObject[n, m];
         for (int i = 1; i < n - 1; i++)
         {
-            map[i, 0] = map[i, m - 1] = new Wall();
+            map[i, 0] = new Wall();
+            map[i, m - 1] = new Wall();
+
             for (int j = 1; j < m - 1; j++)
-                map[i, j] = new Empty();
+            {
+                map[i, j] = null;
+                /*if (i % 2 != 0 || j % 2 != 0) map[i, j] = new Empty();
+                else map[i, j] = new Wall();*/
+            }
         }
         for (int i = 0; i < m; i++)
         {
-            map[0, i] = map[n - 1, i] = new Wall();
+            map[0, i] = new Wall();
+            map[n - 1, i] = new Wall();
+        }
+        // Теперь надо бы сделать лабиринт -_-
+        
+        CreateRoad(1, 1);
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (map[i, j] == null) map[i, j] = new Wall();
+            }
+        }
+    }
+
+    private void CreateRoad(int i, int j)
+    {
+        // Надо послать во все 4 стороны))
+        map[i, j] = new Empty();
+        
+        bool[] bl = { true, true, true, true };
+        int sl;
+        // 3 1 4 2
+        // 0 0 1 1
+        // пойти в 1
+        for (int q = 4; q > 0; q--)
+        {
+            sl = rand.Next(q);
+            for (int k = 0; k <= sl; k++)
+            {
+                if (!bl[k]) sl++;
+            }
+            bl[sl] = false;
+            switch (sl)
+            {
+                case 0: // Север
+                    if (i - 2 > 0)
+                    {
+                        if (map[i - 2, j] == null)
+                        {
+                            map[i - 1, j] = new Empty();
+                            CreateRoad(i - 2, j);
+                        }
+                    }
+                    break;
+                case 1: // Запад
+                    if (j - 2 > 0)
+                    {
+                        if (map[i, j - 2] == null)
+                        {
+                            map[i, j - 1] = new Empty();
+                            CreateRoad(i, j - 2);
+                        }
+                    }
+                    break;
+                case 2: // Юг
+                    if (i + 2 < n - 1)
+                    {
+                        if (map[i + 2, j] == null)
+                        {
+                            map[i + 1, j] = new Empty();
+                            CreateRoad(i + 2, j);
+                        }
+                    }
+                    break;
+                case 3: // Восток
+                    if (j + 2 < m - 1)
+                    {
+                        if (map[i, j + 2] == null)
+                        {
+                            map[i, j + 1] = new Empty();
+                            CreateRoad(i, j + 2);
+                        }
+                    }
+                    break;
+            }
         }
     }
 
@@ -163,7 +246,10 @@ class Map
         {
             for (int j = 0; j < m; j++)
             {
-                Console.Write(map[i,j].GetSym());
+                if (map[i, j] != null)
+                    Console.Write(map[i, j].GetSym() + " ");
+                else
+                    Console.Write('E' + " ");
             }
             Console.WriteLine();
         }
@@ -172,13 +258,13 @@ class Map
     public bool itsEmpty(Position newPosition)
     {
         if (newPosition.x >= n || newPosition.y >= m) return false;
-        if (Empty.GetSymSt() == map[newPosition.x,newPosition.y].GetSym())
+        if (Empty.GetSymSt() == map[newPosition.x, newPosition.y].GetSym())
         {
             return true;
         }
         return false;
     }
-    
+
     public void Move(Position oldPos, Position newPos, GameObject player)
     {
         if (newPos.x >= n || newPos.y >= m) return;
@@ -211,7 +297,7 @@ class Empty : GameObject
 {
     protected static char symSt;
     public Empty()
-    {   
+    {
         sym = '.';
     }
     static Empty()
@@ -245,7 +331,8 @@ abstract class Person : GameObject
         hp = maxHP;
         this.position = position;
     }
-    public void Move(Position newPosition){
+    public void Move(Position newPosition)
+    {
         position = newPosition;
     }
     public Position GetPosition()
@@ -282,5 +369,5 @@ struct Position
         this.x = x;
         this.y = y;
     }
-    
+
 }
