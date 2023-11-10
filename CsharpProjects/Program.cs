@@ -2,6 +2,7 @@
 
 using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics.SymbolStore;
+using System.Formats.Asn1;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -14,7 +15,6 @@ namespace Rogalic
         {
             Game game = new Game();
             game.Start();
-            game.Update();
         }
     }
 }
@@ -28,6 +28,16 @@ class Game
     string str = "HP: ";
     bool exit = false;
     public Random rng = new Random();
+    byte bMenu = 0;
+    bool openMenu;
+    string[] textMenu =
+    {
+        "Продолжить игру",
+        "Создать новую карту",
+        "Добавить противника",
+        "Выйти"
+    };
+    int maxLengthTextMenu;
     public void SetFPS(byte fps)
     {
         if (fps < 5 || fps > 240) this.fps = 20;
@@ -35,9 +45,15 @@ class Game
     }
     public void Start()
     {
-        myMap = new Map();
-        myMap.Create();
+        maxLengthTextMenu = 0;
+        for (int i = 0; i < textMenu.Length; i++)
+        {
+            if (textMenu[i].Length>maxLengthTextMenu) maxLengthTextMenu = textMenu[i].Length;
+        }
+        Menu();
+        Update();
     }
+
 
     public void Update()
     {
@@ -55,7 +71,7 @@ class Game
     {
         if (myMap == null) return;
         if (enemy == null) enemy = new List<Enemy>();
-        int q = 2;
+        int q = 1;
         for (int i = 0; i < q; i++)
             enemy.Add(new Enemy());
         int n = myMap.n;
@@ -92,30 +108,95 @@ class Game
             player.Move(pos);
         }
     }
+    public void Menu()
+    {
+        openMenu = true;
+        Console.Clear();
+        while (openMenu)
+        {
+            Thread.Sleep(1000 / fps);
+            Console.Clear();
+            for (int i = 0;i < textMenu.Length; i++)
+            {
+                Console.Write('\t');
+                for (int j = 0; j < (maxLengthTextMenu - textMenu[i].Length) / 2; j++)
+                    Console.Write(' ');
+                Console.Write((bMenu==i) ? ('[') : (' '));
+                Console.Write(textMenu[i].ToString());
+                Console.WriteLine((bMenu == i) ? (']') : (' '));
+            }
+            KeyDownFunction(Console.ReadKey(true).Key);
+        }
+    }
+
+    void MenuActivate(int x)
+    {
+        switch (x)
+        {
+            case 0:
+                if (myMap == null) return;
+                if(myMap.n==-1 || myMap.m==-1)  return;
+                openMenu = false;
+                break;
+            case 1:
+                if (myMap == null) myMap = new Map();
+                myMap.Create();
+                SpawnPlayer();
+                break;
+            case 2:
+
+                break;
+            case 3:
+                openMenu = false;
+                exit = true;
+                break;
+        }
+    }
 
     private void KeyDownFunction(ConsoleKey key)
     {
-        switch (key)
+        if (openMenu)
         {
-            case ConsoleKey.Escape:
-                exit = true;
-                break;
-            case ConsoleKey.Enter:
-                SpawnPlayer();
-                SpawnEnemy();
-                break;
-            case ConsoleKey.W:
-                MovePlayer(-1, 0);
-                break;
-            case ConsoleKey.S:
-                MovePlayer(1, 0);
-                break;
-            case ConsoleKey.A:
-                MovePlayer(0, -1);
-                break;
-            case ConsoleKey.D:
-                MovePlayer(0, 1);
-                break;
+            switch (key)
+            {
+                case ConsoleKey.Escape:
+                    MenuActivate(0);
+                    break;
+                case ConsoleKey.Enter:
+                    MenuActivate(bMenu);
+                    break;
+                case ConsoleKey.W:
+                    if(bMenu > 0) bMenu--;
+                    break;
+                case ConsoleKey.S:
+                    if (bMenu < textMenu.Length-1) bMenu++;
+                    break;
+            }
+        }
+        else
+        {
+            switch (key)
+            {
+                case ConsoleKey.Escape:
+                    Menu();
+                    break;
+                case ConsoleKey.Enter:
+                    SpawnPlayer();
+                    SpawnEnemy();
+                    break;
+                case ConsoleKey.W:
+                    MovePlayer(-1, 0);
+                    break;
+                case ConsoleKey.S:
+                    MovePlayer(1, 0);
+                    break;
+                case ConsoleKey.A:
+                    MovePlayer(0, -1);
+                    break;
+                case ConsoleKey.D:
+                    MovePlayer(0, 1);
+                    break;
+            }
         }
     }
     public bool itsEmpty(Position newPosition)
@@ -140,23 +221,29 @@ class Map
     Random rand = new Random();
     public int n { get; private set; }
     public int m { get; private set; }
+    public Map()
+    {
+        n = -1;
+        m = -1;
+    }
     public void Create()
     {
         n = 13;
         m = 25;
-        spawnPlayer = new Position(n / 2, m / 2);
+        // (n-2)/2+1
+        spawnPlayer = new Position(1 + rand.Next((n - 2) / 2 + 1)*2,1 + rand.Next((m - 2) / 2 + 1)*2);
         map = new GameObject[n, m];
         for (int i = 1; i < n - 1; i++)
         {
             map[i, 0] = new Wall();
             map[i, m - 1] = new Wall();
 
-            for (int j = 1; j < m - 1; j++)
-            {
-                map[i, j] = null;
-                /*if (i % 2 != 0 || j % 2 != 0) map[i, j] = new Empty();
-                else map[i, j] = new Wall();*/
-            }
+            //for (int j = 1; j < m - 1; j++)
+            //{
+            //    map[i, j] = null;
+            //    /*if (i % 2 != 0 || j % 2 != 0) map[i, j] = new Empty();
+            //    else map[i, j] = new Wall();*/
+            //}
         }
         for (int i = 0; i < m; i++)
         {
@@ -165,7 +252,7 @@ class Map
         }
         // Теперь надо бы сделать лабиринт -_-
         
-        CreateRoad(1, 1);
+        CreateRoad(1, 1); // Рекурсивная функция
 
         for (int i = 0; i < n; i++)
         {
@@ -271,8 +358,20 @@ class Map
         map[oldPos.x, oldPos.y] = map[newPos.x, newPos.y];
         map[newPos.x, newPos.y] = player;
     }
+    private void ClearMap()
+    {
+        for(int i = 1;i < n; i++)
+        {
+            for (int j = 1; j < m; j++)
+            {
+                if (map[i, j].tag != typeof(Wall).Name && map[i, j].tag != typeof(Empty).Name)
+                    map[i, j] = new Empty();
+            }
+        }
+    }
     public Position SpawnPlayer(GameObject player)
     {
+        ClearMap();
         map[spawnPlayer.x, spawnPlayer.y] = player;
         return spawnPlayer;
     }
@@ -298,10 +397,12 @@ class Empty : GameObject
     protected static char symSt;
     public Empty()
     {
+        tag = typeof(Empty).Name;
         sym = '.';
     }
     static Empty()
     {
+        
         symSt = '.';
     }
     public static char GetSymSt()
@@ -316,7 +417,7 @@ class Wall : GameObject
     {
         sym = '#';
         f = false;
-        tag = "Wall";
+        tag = typeof(Wall).Name;
     }
 }
 
