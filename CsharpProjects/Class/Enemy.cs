@@ -14,5 +14,16 @@ namespace CsharpProjects.Class
             tag = "Enemy";
             maxHP = 1;
         }
+        public override bool HitKill()
+        {
+            hp--;
+            if (hp == 0)
+            {
+                position = new Position(0, 0);
+                //life = false;
+                Game.enemy.Remove(this);
+            }
+            return hp == 0;
+        }
     }
 }

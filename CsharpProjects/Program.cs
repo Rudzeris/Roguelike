@@ -140,6 +140,10 @@ class Game
         if (enemy == null) return;
         for (int i = 0; i < enemy.Count; i++)
         {
+            if (enemy[i].hp < 1)
+            {
+                enemy.Remove(enemy[i]);
+            }
             bool[] bl = myMap.Napravlenie4(enemy[i].position);
 
             int x, y;
@@ -311,6 +315,9 @@ class Game
                 case ConsoleKey.D:
                     MovePlayer(0, 1);
                     break;
+                case ConsoleKey.E:
+                    Kick();
+                    break;
                 case ConsoleKey.K:
                     timeHit *= 2;
                     break;
@@ -324,6 +331,17 @@ class Game
                     timeMove/= 2;
                     break;
             }
+        }
+    }
+
+    private void Kick()
+    {
+        if(enemy == null || player  == null) return;
+        for (int i = 0; i < enemy.Count; i++)
+        {
+            if (Math.Abs(enemy[i].position.x - player.position.x)
+                + Math.Abs(enemy[i].position.y - player.position.y) == 1)
+                myMap.Hit(enemy[i].position);
         }
     }
     public bool itsEmpty(Position newPosition)

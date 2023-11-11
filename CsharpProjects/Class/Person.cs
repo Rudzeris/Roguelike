@@ -11,16 +11,21 @@ namespace CsharpProjects.Class
         public uint maxHP { get; protected set; }
         public uint hp { get; protected set; }
         public Position position { get; protected set; }
-
+        //public bool life { get; private set; }
         public override bool HitKill()
         {
             hp--;
-            if (hp==0) position = new Position(0, 0);
+            if (hp == 0)
+            {
+                position = new Position(0, 0);
+                //life = false;
+            }
             return hp == 0;
         }
 
         public void Create(Position position) // В конструктор
         {
+            //life = true;
             hp = maxHP;
             this.position = position;
         }
