@@ -41,7 +41,7 @@ class Game
     {
         "Продолжить игру",
         "Создать новую карту",
-        "Добавить противника",
+        "Пусто",
         "Выйти"
     };
     int maxLengthTextMenu;
@@ -268,6 +268,12 @@ class Game
                 exit = true;
                 break;
         }
+    }
+
+    public static void ClearEnemy()
+    {
+        if (enemy == null) return;
+        enemy.Clear();
     }
 
     private void KeyDownFunction(ConsoleKey key)

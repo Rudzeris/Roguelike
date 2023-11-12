@@ -76,7 +76,7 @@ namespace CsharpProjects.Class
         {
             if (map == null || n == -1 || m == -1) return; // нет карты
             if (map[spawnPlayer.x, spawnPlayer.y].tag == null) return; // нет дороги
-
+            if (Game.enemy?.Count != 0) Game.ClearEnemy();
 
             for (int i = 1; i < n; i += 8)
             {
