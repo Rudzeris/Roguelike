@@ -26,6 +26,7 @@ class Game
 {
     public Player player;
     public static List<Enemy> enemy;
+    public List<Web> bullet;
     private Map myMap;
     byte fps = 20;
     string str = "HP: ";
@@ -36,7 +37,6 @@ class Game
     uint timers;
     int timeHit;
     int timeMove;
-    int timeBullet;
     string[] textMenu =
     {
         "Продолжить игру",
@@ -60,7 +60,6 @@ class Game
         timers = 0;
         timeHit = fps * 3;
         timeMove = fps;
-        timeBullet = fps * 2;
         Menu();
         Update();
     }
@@ -77,7 +76,7 @@ class Game
         Console.WriteLine("Скорость врагов: " + (fps/timeMove).ToString());
         Console.WriteLine("Скорость атаки у врагов: " + (fps/timeHit).ToString());
         if (timers % timeMove == 0) MoveEnemy(timers % timeHit == 0);
-        //if (timers % timeBullet == 0) MoveBullet();
+        if (timers % (timeMove/2) == 0) MoveBullet();
 
         timers = timers % 240 + 1;
         if (!exit) Update();
@@ -95,7 +94,7 @@ class Game
         }
     }
 
-    /*private void MoveBullet()
+    private void MoveBullet()
     {
         int x, y;
         if (bullet == null) return;
@@ -109,31 +108,44 @@ class Game
             Position newP = new Position(bullet[i].position.x + x, bullet[i].position.y+y);
             if (!myMap.itsEmpty(newP))
             {
-                if(myMap.itsEmptyTag(newP) == typeof(Wall).Name)
+                if (myMap.itsEmptyTag(newP) == typeof(Wall).Name)
                 {
                     myMap.Move(bullet[i].position, bullet[i].position, new Empty());
                     bullet.Remove(bullet[i]);
                     i--;
                 }
-                else if(myMap.itsEmptyTag(newP) == typeof(Player).Name)
+                else if (myMap.itsEmptyTag(newP) == typeof(Player).Name)
                 {
                     myMap.Move(bullet[i].position, bullet[i].position, new Empty());
                     bullet.Remove(bullet[i]);
-                    player.HitKill();
+                    myMap.Hit(newP);
                     i--;
                 }
             }
-            myMap.Move(bullet[i].position, newP, bullet[i]);
-            bullet[i].Move(newP);
+            else
+            {
+                myMap.Move(bullet[i].position, newP, bullet[i]);
+                bullet[i].Move(newP);
+            }
         }
-    }*/
+    }
 
-    /*private void CreateWeb(Position pos,Position attack)
+    private void CreateWeb(Position pos,Position attack)
     {
         if (bullet == null) bullet = new List<Web>();
-        Web temp = new Web(pos,attack);
-        bullet.Add(temp);
-    }*/
+        if (!myMap.itsEmpty(pos))
+        {
+            if (myMap.itsEmptyTag(pos) == typeof(Player).Name)
+            {
+                myMap.Hit(pos);
+            }
+        }
+        else
+        {
+            Web temp = new Web(pos, attack);
+            bullet.Add(temp);
+        }
+    }
 
     private void MoveEnemy(bool kick)
     {
@@ -173,33 +185,33 @@ class Game
                 {
                     case 0:
                         x--;
-                        //if (kick && enemy[i].tag == typeof(Spider).Name)
-                        //    CreateWeb(new Position(x, y), enemy[i].position);
-                        //else
+                        if (kick && enemy[i].tag == typeof(Spider).Name)
+                            CreateWeb(new Position(x, y), enemy[i].position);
+                        else
                         if (player.position.x != x || player.position.y != y)
                             MoveEnemy(x, y, enemy[i]);
                         break;
                     case 1:
                         y--;
-                        //if (kick && enemy[i].tag == typeof(Spider).Name)
-                        //    CreateWeb(new Position(x, y), enemy[i].position);
-                        //else
+                        if (kick && enemy[i].tag == typeof(Spider).Name)
+                            CreateWeb(new Position(x, y), enemy[i].position);
+                        else
                         if (player.position.x != x || player.position.y != y)
                             MoveEnemy(x, y, enemy[i]);
                         break;
                     case 2:
                         x++;
-                        //if (kick && enemy[i].tag == typeof(Spider).Name)
-                        //    CreateWeb(new Position(x, y), enemy[i].position);
-                        //else
+                        if (kick && enemy[i].tag == typeof(Spider).Name)
+                            CreateWeb(new Position(x, y), enemy[i].position);
+                        else
                         if (player.position.x != x || player.position.y != y)
                             MoveEnemy(x, y, enemy[i]);
                         break;
                     case 3:
                         y++;
-                        //if (kick && enemy[i].tag == typeof(Spider).Name)
-                        //    CreateWeb(new Position(x, y), enemy[i].position);
-                        //else
+                        if (kick && enemy[i].tag == typeof(Spider).Name)
+                            CreateWeb(new Position(x, y), enemy[i].position);
+                        else
                         if (player.position.x != x || player.position.y != y)
                             MoveEnemy(x, y, enemy[i]);
                         break;
@@ -325,16 +337,16 @@ class Game
                     Kick();
                     break;
                 case ConsoleKey.K:
-                    timeHit *= 2;
+                    timeHit *= (timeHit<20)?(2):(1);
                     break;
                 case ConsoleKey.L:
-                    timeHit /= 2;
+                    timeHit /= (timeHit>1)?(2):(1);
                     break;
                 case ConsoleKey.O:
-                    timeMove*= 2;
+                    timeMove*= (timeMove < 20) ? (2) : (1);
                     break;
                 case ConsoleKey.P:
-                    timeMove/= 2;
+                    timeMove/= (timeMove > 1) ? (2) : (1);
                     break;
             }
         }
