@@ -9,6 +9,11 @@ namespace CsharpProjects.Class
     internal class Map
     {
         internal List<List<GameObject>> map;
+
+        internal Position spawn_player { get; private set; }
+        internal List<Position> spawn_enemies { get; private set; }
+
+
         Random rand = new Random();
         internal int n { get; private set; }
         internal int m { get; private set; }
@@ -20,6 +25,25 @@ namespace CsharpProjects.Class
         {
             n = 13;
             m = 25;
+
+            spawn_player = new Position(
+                1 + 2 * rand.Next(0, (n - 2) / 2),
+                1 + 2 * rand.Next(0, (m - 2) / 2)
+                );
+
+            int radius = 3;
+            spawn_enemies = new List<Position>();
+            for(int i = 1; i < n-1; i += 4)
+            {
+                for(int j = 1; j < m-1;  j += 4)
+                {
+                    if (Math.Pow(spawn_player.x - i, 2)+
+                        Math.Pow(spawn_player.y - j, 2) > radius)
+                    {
+                        spawn_enemies.Add(new Position(i, j));
+                    }
+                }
+            }
 
             map?.Clear();
             map=new List<List<GameObject>>();
@@ -47,7 +71,10 @@ namespace CsharpProjects.Class
             }
 
             // Создаем дороги с помощью рекурсивной функции
-            CreateRoad(1 + 2 * rand.Next(0, (n - 2) / 2), 1 + 2 * rand.Next(0, (m - 2) / 2));
+            CreateRoad(
+                1 + 2 * rand.Next(0, (n - 2) / 2),
+                1 + 2 * rand.Next(0, (m - 2) / 2)
+                );
 
             // Добавляем стены внутри лабиринта
             for (int i = 0; i < n; i++)

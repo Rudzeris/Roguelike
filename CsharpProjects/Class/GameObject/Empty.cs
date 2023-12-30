@@ -12,13 +12,8 @@ namespace CsharpProjects.Class
         public Empty()
         {
             tag = typeof(Empty).Name;
-            sym = '.';
+            sym = ' ';
             //position = null;
-        }
-        static Empty()
-        {
-
-            symSt = '.';
         }
         public static char GetSymSt()
         {

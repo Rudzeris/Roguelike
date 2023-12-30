@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace CsharpProjects.Class
 {
-    internal abstract class Enemy : Person
+    internal class Zombie:Enemy
     {
-        public Enemy()
+        public Zombie()
         {
             sym = 'X';
             tag = "Enemy";
             maxHP = 1;
             //position = null;
         }
-        public Enemy(Position position)
+        public Zombie(Position position)
         {
             sym = 'X';
             tag = "Enemy";
             maxHP = 1;
-            this.position=position;
+            this.position = position;
         }
     }
 }
