@@ -8,10 +8,10 @@ namespace CsharpProjects.Class
 {
     internal class EnemyFabrica
     {
-        public static GameObject CreateEmemy(int x, Position pos)
+        internal static GameObject CreateEmemy(int x, Position pos)
         {
-            if (Game.enemy == null) Game.enemy = new List<Enemy>();
-            switch (x)
+            //if (Game._enemies == null) Game._enemies = new List<Enemy>();
+            /*switch (x)
             {
                 case 0:
 
@@ -25,7 +25,7 @@ namespace CsharpProjects.Class
                     temp.Create(pos);
                     Game.enemy.Add(temp);
                     return temp;
-            }
+            }*/
             return new Empty();
         }
     }

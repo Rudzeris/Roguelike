@@ -13,6 +13,7 @@ namespace CsharpProjects.Class
         {
             tag = typeof(Empty).Name;
             sym = '.';
+            //position = null;
         }
         static Empty()
         {

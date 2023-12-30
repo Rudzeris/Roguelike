@@ -14,6 +14,14 @@ namespace CsharpProjects.Class
             sym = 'S';
             tag = typeof(Spider).Name;
             maxHP = 1;
+            //position = null;
+        }
+        public Spider(Position position)
+        {
+            sym = 'S';
+            tag = typeof(Spider).Name;
+            maxHP = 1;
+            this.position = position;
         }
     }
 }

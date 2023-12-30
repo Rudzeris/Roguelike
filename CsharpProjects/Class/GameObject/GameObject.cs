@@ -8,17 +8,11 @@ namespace CsharpProjects.Class
 {
     internal abstract class GameObject
     {
+        internal Position position { get; private protected set; }
         protected char sym = ' ';
         protected bool f = true;
         public string tag = "None";
-        public virtual bool HitKill()
-        {
-            return false;
-        }
-        public virtual void Move(Position position)
-        {
-
-        }
+        
         public char GetSym()
         {
             return sym;
@@ -27,6 +21,7 @@ namespace CsharpProjects.Class
         {
             return tag;
         }
+        
     }
 
 }

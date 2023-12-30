@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace CsharpProjects.Class
 {
-    internal class Finish:Empty
+    internal class Wall : GameObject
     {
-        public Finish()
+        public Wall()
         {
-            sym = 'W';
-            f = true;
-            tag = typeof(Finish).Name;
+            sym = '#';
+            f = false;
+            tag = typeof(Wall).Name;
+            //position = null;
         }
     }
 }

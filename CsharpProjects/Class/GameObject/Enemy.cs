@@ -13,17 +13,14 @@ namespace CsharpProjects.Class
             sym = 'X';
             tag = "Enemy";
             maxHP = 1;
+            //position = null;
         }
-        public override bool HitKill()
+        public Enemy(Position position)
         {
-            hp--;
-            if (hp == 0)
-            {
-                position = new Position(0, 0);
-                //life = false;
-                Game.enemy.Remove(this);
-            }
-            return hp == 0;
+            sym = 'X';
+            tag = "Enemy";
+            maxHP = 1;
+            this.position=position;
         }
     }
 }

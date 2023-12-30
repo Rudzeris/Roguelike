@@ -13,6 +13,14 @@ namespace CsharpProjects.Class
             sym = 'P';
             tag = "Player";
             maxHP = 4;
+            //position = null;
+        }
+        public Player(Position position)
+        {
+            sym = 'P';
+            tag = "Player";
+            maxHP = 4;
+            this.position = position;
         }
     }
 }
