@@ -8,19 +8,23 @@ namespace CsharpProjects.Class
 {
     internal class Player : Person
     {
-        public Player()
+        internal void Spawn()
+        {
+            hp = maxHP;
+            position = spawn_position;
+        }
+        public Player():base()
         {
             sym = 'P';
             tag = "Player";
             maxHP = 4;
             //position = null;
         }
-        public Player(Position position)
+        public Player(Position spawn_position):base(spawn_position)
         {
             sym = 'P';
             tag = "Player";
             maxHP = 4;
-            this.position = position;
         }
     }
 }

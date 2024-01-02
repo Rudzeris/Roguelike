@@ -14,9 +14,33 @@ namespace CsharpProjects.Class
             this.x = x;
             this.y = y;
         }
-        public bool Sravn(Position temp)
+        public Position(Position temp)
         {
-            return x==temp.x && y==temp.y;
+            this.x=temp.x;
+            this.y=temp.y;
+        }
+        public static bool operator !=(Position pos1, Position pos2)
+        {
+            return !(pos1 == pos2);
+        }
+        public static bool operator ==(Position pos1, Position pos2)
+        {
+            return pos1.x == pos2.y && pos1.y == pos2.y;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            Position temp = (Position)obj;
+            return x == temp.x && y == temp.y;
+        }
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode();
         }
 
     }

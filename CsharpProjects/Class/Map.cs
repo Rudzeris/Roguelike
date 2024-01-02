@@ -31,7 +31,7 @@ namespace CsharpProjects.Class
                 1 + 2 * rand.Next(0, (m - 2) / 2)
                 );
 
-            int radius = 3;
+            int radius = 4;
             spawn_enemies = new List<Position>();
             for(int i = 1; i < n-1; i += 4)
             {

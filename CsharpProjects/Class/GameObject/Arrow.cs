@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace CsharpProjects.Class
 {
-    internal class Web : GameObject
+    internal class Arrow : GameObject
     {
-        public Position attack { get; private set; }
-        public Web(Position pos, Position at)
+        public Arrow(Position spawn_position)
         {
-            position = pos;
-            attack = at;
             sym = '*';
             f = true;
-            tag = typeof(Wall).Name;
         }
     }
 }

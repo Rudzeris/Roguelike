@@ -12,6 +12,8 @@ namespace CsharpProjects.Class
         internal Player _player { set; get; }
         internal Monitor _monitor { set; get; }
 
+        internal uint _count_enemy_on_the_map = 5;
+
         internal Map _map { set; get; }
 
         internal EnemyFabric _enemy_fabric { set; get; }
@@ -25,8 +27,9 @@ namespace CsharpProjects.Class
             _enemies = new List<Enemy>();
             _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric(this,_map);
+            _player.Spawn();
             FPS = 20;
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
                 _enemy_fabric.CreateEmemy(i % 2 == 0);
             }
@@ -43,9 +46,28 @@ namespace CsharpProjects.Class
             DrawMap();
         }
 
+        private void Intersection()
+        {
+            
+        }
+
         private void DrawMap()
         {
-            _monitor.DrawMap(_map.map,_player,_enemies.ToList<GameObject>());
+            _monitor.DrawMap(_map.map,_player,_enemies.ToList<Person>());
+        }
+
+        internal bool is_it_empty(Position new_position)
+        {
+            if (_map.map[new_position.x][new_position.y] is not Empty)
+            {
+                return false;
+            }
+            for(int i = 0; i < _enemies.Count; i++)
+            {
+                if (_enemies[i].position==new_position)
+                    return false;
+            }
+            return true;
         }
     }
 }

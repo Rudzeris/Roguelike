@@ -11,9 +11,14 @@ namespace CsharpProjects.Class
     {
         uint flash_per_second = 1;
         uint count_update = 0;
+
+        internal void DrawInformation(Person person)
+        {
+            Console.WriteLine($"Hit Point: {person.hp}");
+        }
         internal void DrawMap(List<List<GameObject>> _map,
-            GameObject? _player = null,
-            List<GameObject>? _enemies = null)
+            Person? _player = null,
+            List<Person>? _enemies = null)
         {
             if (_map == null) return;
             // copy map
@@ -54,6 +59,8 @@ namespace CsharpProjects.Class
                 }
                 Console.WriteLine();
             }
+
+            DrawInformation(_player);
         }
     }
 }

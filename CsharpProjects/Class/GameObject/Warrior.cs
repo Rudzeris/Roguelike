@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace CsharpProjects.Class
 {
-    internal abstract class Enemy : Person
+    internal class Warrior:Enemy
     {
-        public Enemy(Position spawn_position):base(spawn_position)
+        public Warrior(Position spawn_position):base(spawn_position)
         {
-            sym = 'X';
-            tag = "Enemy";
-            maxHP = 1;
+            sym = 'W';
         }
     }
 }

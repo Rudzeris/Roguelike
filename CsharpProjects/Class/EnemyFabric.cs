@@ -24,11 +24,11 @@ namespace CsharpProjects.Class
         internal void CreateEmemy(bool type)
         {
             Position enemy_position = GetEnemyPosition();
-            if(enemy_position.Sravn(new Position(-1,-1)))
+            if(enemy_position==new Position(-1,-1))
                 return;
             Enemy enemy=null;
-            if (type) enemy = new Spider(enemy_position);
-            else enemy = new Zombie(enemy_position);
+            if (type) enemy = new Archer(enemy_position);
+            else enemy = new Warrior(enemy_position);
             enemies_list.Add(enemy);
         }
         internal Position GetEnemyPosition()
