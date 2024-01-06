@@ -14,5 +14,13 @@ namespace CsharpProjects.Class
             tag = "Enemy";
             maxHP = 1;
         }
+
+        internal void Move()
+        {
+            Position new_position = ControllerEnemy.Move(position);
+            if(Game.is_it_empty(new_position))
+                position=new_position;
+        }
+
     }
 }

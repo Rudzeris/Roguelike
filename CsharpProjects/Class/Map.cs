@@ -13,8 +13,6 @@ namespace CsharpProjects.Class
         internal Position spawn_player { get; private set; }
         internal List<Position> spawn_enemies { get; private set; }
 
-
-        Random rand = new Random();
         internal int n { get; private set; }
         internal int m { get; private set; }
         public Map()
@@ -27,8 +25,8 @@ namespace CsharpProjects.Class
             m = 25;
 
             spawn_player = new Position(
-                1 + 2 * rand.Next(0, (n - 2) / 2),
-                1 + 2 * rand.Next(0, (m - 2) / 2)
+                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
                 );
 
             int radius = 4;
@@ -72,8 +70,8 @@ namespace CsharpProjects.Class
 
             // Создаем дороги с помощью рекурсивной функции
             CreateRoad(
-                1 + 2 * rand.Next(0, (n - 2) / 2),
-                1 + 2 * rand.Next(0, (m - 2) / 2)
+                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
                 );
 
             // Добавляем стены внутри лабиринта
@@ -98,7 +96,7 @@ namespace CsharpProjects.Class
             // пойти в 1
             for (int q = 4; q > 0; q--)
             {
-                sl = rand.Next(q);
+                sl = Game._rand.Next(q);
                 for (int k = 0; k <= sl; k++)
                 {
                     if (!bl[k]) sl++;
@@ -150,7 +148,7 @@ namespace CsharpProjects.Class
             }
         }
 
-        public bool itsEmpty(Position newPosition) // нет применения
+        public bool IsItEmpty(Position newPosition) // нет применения
         {
             if (newPosition.x >= n || newPosition.y >= m) return false;
             if (map[newPosition.x][newPosition.y] == null) return false;
@@ -159,12 +157,6 @@ namespace CsharpProjects.Class
                 return true;
             }
             return false;
-        }
-        public string itsEmptyTag(Position newPosition) // нет применения
-        {
-            if (newPosition.x >= n || newPosition.y >= m) return "";
-            if (map[newPosition.x][newPosition.y] == null) return "";
-            return map[newPosition.x][newPosition.y].tag;
         }
         private void ClearMap() // нет применения
         {

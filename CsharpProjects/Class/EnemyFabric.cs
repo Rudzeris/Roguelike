@@ -9,17 +9,8 @@ namespace CsharpProjects.Class
     internal class EnemyFabric
     {
         Random rand = new Random();
-        List<Enemy> enemies_list;
-        List<Position> spawn_point_for_enemies;
         internal EnemyFabric()
         {
-            spawn_point_for_enemies = new List<Position>();
-            enemies_list = new List<Enemy>();
-        }
-        internal EnemyFabric(Game _game, Map map)
-        {
-            this.enemies_list = _game._enemies;
-            this.spawn_point_for_enemies = map.spawn_enemies;
         }
         internal void CreateEmemy(bool type)
         {
@@ -29,14 +20,14 @@ namespace CsharpProjects.Class
             Enemy enemy=null;
             if (type) enemy = new Archer(enemy_position);
             else enemy = new Warrior(enemy_position);
-            enemies_list.Add(enemy);
+            Game._enemies.Add(enemy);
         }
         internal Position GetEnemyPosition()
         {
-            if (spawn_point_for_enemies.Count == 0) return new Position(-1, -1);
-            int index = rand.Next(0, spawn_point_for_enemies.Count);
-            Position enemy_position = spawn_point_for_enemies[index];
-            spawn_point_for_enemies.RemoveAt(index);
+            if (Game._map.spawn_enemies.Count == 0) return new Position(-1, -1);
+            int index = rand.Next(0, Game._map.spawn_enemies.Count);
+            Position enemy_position = Game._map.spawn_enemies[index];
+            Game._map.spawn_enemies.RemoveAt(index);
             return enemy_position;
         }
 

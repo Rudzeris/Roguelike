@@ -11,6 +11,22 @@ namespace CsharpProjects.Class
     {
         uint flash_per_second = 1;
         uint count_update = 0;
+        bool draw_persons = true;
+
+        internal void Monitoring(List<List<GameObject>> _map,uint speed=10,
+            Person? _player = null,
+            List<Person>? _enemies = null)
+        {
+            Console.Clear();
+            DrawTimer();
+            DrawInformation(_player);
+            DrawMap(_map, _player, _enemies);
+        }
+
+        internal void DrawTimer()
+        {
+            Console.WriteLine($"Timer: {Game._timer}");
+        }
 
         internal void DrawInformation(Person person)
         {
@@ -32,7 +48,7 @@ namespace CsharpProjects.Class
                 }
                 map.Add(temp);
             }
-            if (count_update%(Game.FPS/(flash_per_second+1)) != 0)
+            if (draw_persons||count_update%(Game.FPS/(flash_per_second+1)) != 0)
             {
                 if (_enemies != null)
                 {
@@ -47,7 +63,6 @@ namespace CsharpProjects.Class
                 }
             }
             count_update=(count_update+1)%Game.FPS;
-            Console.Clear();
             for (int i = 0; i < map.Count; i++)
             {
                 for (int j = 0; j < map[i].Count; j++)
@@ -60,7 +75,6 @@ namespace CsharpProjects.Class
                 Console.WriteLine();
             }
 
-            DrawInformation(_player);
         }
     }
 }

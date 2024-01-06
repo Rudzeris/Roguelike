@@ -20,6 +20,9 @@ namespace CsharpProjects.Class
             this.position = new Position(spawn_position);
         }
 
+        internal void Move()
+        {
+        }
         //public bool life { get; private set; }
 
     }
