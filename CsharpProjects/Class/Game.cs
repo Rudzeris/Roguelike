@@ -52,23 +52,29 @@ namespace CsharpProjects.Class
         {
 
             Monitoring();
-            MoveEnemies();
+            if (_timer % _move_speed_enemy == 0)
+                ConductEnemies();
+            if (_timer % _move_speed_enemy != 0)
+                ConductPlayer();
             Thread.Sleep(1);
             _timer++;
         }
 
-        private void Intersection()
+        private void Intersection(Position position)
         {
 
         }
 
-        private void MoveEnemies()
+        private void ConductPlayer()
         {
-            if (_timer%_move_speed_enemy!=0)
-                return;
+            //_player.Conduct();
+        }
+
+        private void ConductEnemies()
+        {
             foreach (var enemy in _enemies)
             {
-                enemy.Move();
+                ControllerEnemy.Conduct(enemy);
             }
         }
 
@@ -77,19 +83,25 @@ namespace CsharpProjects.Class
             _monitor.Monitoring(_map.map, 10,_player, _enemies.ToList<Person>());
         }
 
-        static internal bool is_it_empty(Position new_position)
+        static internal bool is_it_empty(Position new_position,bool search_person = true)
         {
+            if (!(new_position.x > 0 && new_position.x < _map.n - 1 && new_position.y > 0 && new_position.y < _map.m))
+                return false;
             if (_map.map[new_position.x][new_position.y] is not Empty)
             {
                 return false;
             }
-            for (int i = 0; i < _enemies.Count; i++)
+            if (search_person)
             {
-                if (_enemies[i].position == new_position)
-                    return false;
+                for (int i = 0; i < _enemies.Count; i++)
+                {
+                    if (_enemies[i].position == new_position)
+                        return false;
+                }
+                if(_player!=null)
+                    if (_player.position == new_position)
+                        return false;
             }
-            if (_player.position == new_position)
-                return false;
             return true;
         }
     }

@@ -17,9 +17,6 @@ namespace CsharpProjects.Class
             Person? _player = null,
             List<Person>? _enemies = null)
         {
-            Console.Clear();
-            DrawTimer();
-            DrawInformation(_player);
             DrawMap(_map, _player, _enemies);
         }
 
@@ -30,7 +27,8 @@ namespace CsharpProjects.Class
 
         internal void DrawInformation(Person person)
         {
-            Console.WriteLine($"Hit Point: {person.hp}");
+            if(person!=null)
+                Console.WriteLine($"Hit Point: {person.hp}");
         }
         internal void DrawMap(List<List<GameObject>> _map,
             Person? _player = null,
@@ -63,6 +61,9 @@ namespace CsharpProjects.Class
                 }
             }
             count_update=(count_update+1)%Game.FPS;
+            Console.Clear();
+            DrawTimer();
+            DrawInformation(_player);
             for (int i = 0; i < map.Count; i++)
             {
                 for (int j = 0; j < map[i].Count; j++)

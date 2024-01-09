@@ -8,10 +8,10 @@ namespace CsharpProjects.Class
 {
     internal class Player : Person
     {
-        internal void Spawn()
+        override internal void Spawn()
         {
-            hp = maxHP;
-            position = spawn_position;
+            base.Spawn();
+            Game._player = this;
         }
         public Player():base()
         {
@@ -26,5 +26,16 @@ namespace CsharpProjects.Class
             tag = "Player";
             maxHP = 4;
         }
+
+        override internal void Conduct(Position array)
+        {
+            
+        }
+
+        internal override void Dead()
+        {
+            Game._player = null;
+        }
+
     }
 }

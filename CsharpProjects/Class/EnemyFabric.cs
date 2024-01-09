@@ -20,7 +20,7 @@ namespace CsharpProjects.Class
             Enemy enemy=null;
             if (type) enemy = new Archer(enemy_position);
             else enemy = new Warrior(enemy_position);
-            Game._enemies.Add(enemy);
+            enemy.Spawn();
         }
         internal Position GetEnemyPosition()
         {
