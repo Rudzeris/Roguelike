@@ -19,7 +19,7 @@ namespace CsharpProjects.Class
         }
         internal Person(Position spawn_position)
         {
-            distance_view = 30;
+            distance_view = 3;
             this.spawn_position = spawn_position;
             this.position = new Position(spawn_position);
         }
@@ -45,8 +45,7 @@ namespace CsharpProjects.Class
         }
 
         //abstract internal void Conduct();
-        abstract internal void Conduct(Position array);
-
+        
         private protected void MoveUp()
         {
             position += ControllerEnemy._move[0];

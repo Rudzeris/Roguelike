@@ -44,7 +44,7 @@ namespace CsharpProjects.Class
                 position=new_position;
         }*/
 
-        override internal void Conduct(Position array)
+        internal void Conduct(Position array)
         {
             if(Game._player != null)
                 if (array + position == Game._player.position)

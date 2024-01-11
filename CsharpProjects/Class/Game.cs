@@ -24,18 +24,20 @@ namespace CsharpProjects.Class
         static internal uint _timer { get; private set; }
 
         static internal uint _move_speed_enemy {get; private set; }
+        static internal uint _move_speed_player {get; private set; }
 
         public void Start()
         {
             _map = new Map();
-            _player = new Player(_map.spawn_player);
+            SpawnPlayer();
             _enemies = new List<Enemy>();
             _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric();
             _player.Spawn();
             FPS = 20;
             _timer = 0;
-            _move_speed_enemy = 20;
+            _move_speed_enemy = 30;
+            _move_speed_player = 10;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
                 _enemy_fabric.CreateEmemy(i % 2 == 0);
@@ -48,13 +50,21 @@ namespace CsharpProjects.Class
 
         }
 
+        internal static void SpawnPlayer()
+        {
+            if (_player == null)
+                _player = new Player(_map.spawn_player);
+            else
+                _player.Spawn();
+        }
+
         public void Update()
         {
 
             Monitoring();
             if (_timer % _move_speed_enemy == 0)
                 ConductEnemies();
-            if (_timer % _move_speed_enemy != 0)
+            if (_timer % _move_speed_player == 0)
                 ConductPlayer();
             Thread.Sleep(1);
             _timer++;
@@ -67,11 +77,12 @@ namespace CsharpProjects.Class
 
         private void ConductPlayer()
         {
-            //_player.Conduct();
+            ControllerPlayer.Conduct(_player);
         }
 
         private void ConductEnemies()
         {
+            if (_enemies.Count < 1) return;
             foreach (var enemy in _enemies)
             {
                 ControllerEnemy.Conduct(enemy);

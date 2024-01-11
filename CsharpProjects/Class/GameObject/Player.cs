@@ -27,9 +27,35 @@ namespace CsharpProjects.Class
             maxHP = 4;
         }
 
-        override internal void Conduct(Position array)
+        internal void Move(Position array)
         {
-            
+            if (!Game.is_it_empty(position + array))
+                return;
+            int x = -1;
+            for (int i = 0; i < ControllerPlayer._move.Length; i++)
+            {
+                if (ControllerPlayer._move[i] == array)
+                {
+                    x = i;
+                    break;
+                }
+            }
+
+            switch (x)
+            {
+                case 0:
+                    MoveUp();
+                    break;
+                case 1:
+                    MoveLeft();
+                    break;
+                case 2:
+                    MoveDown();
+                    break;
+                case 3:
+                    MoveRight();
+                    break;
+            }
         }
 
         internal override void Dead()
