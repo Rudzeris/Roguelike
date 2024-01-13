@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal class Warrior:Enemy
+    internal class Win
     {
-        public Warrior(Position spawn_position):base(spawn_position)
-        {
-            sym = 'W';
-        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using CsharpProjects.Class;
+using Roguelike;
 using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics.SymbolStore;
 using System.Formats.Asn1;

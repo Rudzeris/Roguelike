@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsharpProjects.Class
+namespace Roguelike.Class
 {
     internal interface MoveInterface
     {

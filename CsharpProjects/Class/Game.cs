@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace CsharpProjects.Class
+namespace Roguelike
 {
     internal class Game
     {
@@ -30,7 +30,7 @@ namespace CsharpProjects.Class
         {
             _map.Create();
             _enemies.Clear();
-            if(_player==null) _player = new Player();
+            _player = new Player(_map.spawn_player);
             _player.Spawn();
             _timer = 0;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
@@ -46,6 +46,7 @@ namespace CsharpProjects.Class
             _enemies = new List<Enemy>();
             _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric();
+            _player = new Player(_map.spawn_player);
             _player.Spawn();
             FPS = 20;
             _timer = 0;

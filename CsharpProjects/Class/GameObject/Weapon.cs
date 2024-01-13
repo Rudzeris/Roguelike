@@ -1,13 +1,13 @@
-﻿using CsharpProjects.Class;
+﻿using Roguelike.Class;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Roguelike.Class
+namespace Roguelike
 {
-    abstract internal class Weapon: GameObject
+    internal abstract class Weapon:GameObject
     {
         internal uint distance_attack { get; private protected set; }
         internal bool bow { get;private protected set; }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Roguelike.Class
+namespace Roguelike
 {
     internal class Sword:Weapon
     {
