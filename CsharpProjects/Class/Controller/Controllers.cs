@@ -39,8 +39,23 @@ namespace CsharpProjects.Class
                     case ConsoleKey.T:
                         Game.SpawnPlayer();
                         break;
+                    case ConsoleKey.P:
+                        Game.NewGame();
+                        break;
                     case ConsoleKey.Spacebar:
-
+                        if (player == null) break;
+                        foreach(var move in _move)
+                        {
+                            if (Game.IsEnemy(move + player.position))
+                            {
+                                Enemy enemy=null;
+                                foreach (var _enemy in Game._enemies)
+                                    if(_enemy.position == (player.position+move))
+                                        enemy = _enemy;
+                                player.Hit(enemy);
+                                break;
+                            }
+                        }
                         break;
                 }
                 while (Console.KeyAvailable)
@@ -75,7 +90,7 @@ namespace CsharpProjects.Class
             {
                 if (position + move != old_position)
                 {
-                    if (!Game.is_it_empty(position + move, false))
+                    if (!Game.IsItEmpty(position + move, false))
                         continue;
                     temp = TracerPlayer(new Position(position + move), position, length + 1);
                     if (temp != Enemy.distance_view && temp < minimum)
@@ -95,7 +110,7 @@ namespace CsharpProjects.Class
             Position true_position = new Position(0, 0);
             foreach (var move in _move)
             {
-                if (!Game.is_it_empty(enemy.position + move, false))
+                if (!Game.IsItEmpty(enemy.position + move, false))
                     continue;
                 temp = TracerPlayer(enemy.position + move, enemy.position);
                 if (temp < minimum)
@@ -119,7 +134,7 @@ namespace CsharpProjects.Class
                         if (!bl[k]) sl++;
                     }
                     bl[sl] = false;
-                    if (Game.is_it_empty(enemy.position + _move[sl]))
+                    if (Game.IsItEmpty(enemy.position + _move[sl]))
                     {
                         true_position = _move[sl];
                         break;
@@ -128,7 +143,7 @@ namespace CsharpProjects.Class
             }
             // если луч ничего не дал, то ходим в случайное свободное место
 
-            if (Game.is_it_empty(enemy.position + true_position, false))
+            if (Game.IsItEmpty(enemy.position + true_position, false))
                 enemy.Conduct(true_position);
         }
     }

@@ -13,11 +13,11 @@ namespace CsharpProjects.Class
         static internal Player _player { set; get; }
         static internal Monitor _monitor { set; get; }
 
-        static internal uint _count_enemy_on_the_map = 5;
+        static internal uint _count_enemy_on_the_map;
 
         static internal Map _map { set; get; }
 
-        internal EnemyFabric _enemy_fabric { set; get; }
+        static internal EnemyFabric _enemy_fabric { set; get; }
 
         static internal uint FPS { get; private set; }
 
@@ -25,6 +25,19 @@ namespace CsharpProjects.Class
 
         static internal uint _move_speed_enemy {get; private set; }
         static internal uint _move_speed_player {get; private set; }
+
+        public static void NewGame()
+        {
+            _map.Create();
+            _enemies.Clear();
+            if(_player==null) _player = new Player();
+            _player.Spawn();
+            _timer = 0;
+            for (int i = 0; i < _count_enemy_on_the_map; i++)
+            {
+                _enemy_fabric.CreateEmemy(i % 2 == 0);
+            }
+        }
 
         public void Start()
         {
@@ -36,8 +49,9 @@ namespace CsharpProjects.Class
             _player.Spawn();
             FPS = 20;
             _timer = 0;
-            _move_speed_enemy = 30;
+            _move_speed_enemy = 80;
             _move_speed_player = 10;
+            _count_enemy_on_the_map = 5;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
                 _enemy_fabric.CreateEmemy(i % 2 == 0);
@@ -45,9 +59,18 @@ namespace CsharpProjects.Class
             while (true)
             {
                 Update();
-                //Thread.Sleep(1000 / (int)FPS);
             }
 
+        }
+
+        internal static bool IsEnemy(Position position)
+        {
+            if (_enemies.Count < 1) return false;
+            foreach(var enemy in _enemies)
+            {
+                if(enemy.position == position) return true;
+            }
+            return false;
         }
 
         internal static void SpawnPlayer()
@@ -94,7 +117,7 @@ namespace CsharpProjects.Class
             _monitor.Monitoring(_map.map, 10,_player, _enemies.ToList<Person>());
         }
 
-        static internal bool is_it_empty(Position new_position,bool search_person = true)
+        static internal bool IsItEmpty(Position new_position,bool search_person = true)
         {
             if (!(new_position.x > 0 && new_position.x < _map.n - 1 && new_position.y > 0 && new_position.y < _map.m))
                 return false;

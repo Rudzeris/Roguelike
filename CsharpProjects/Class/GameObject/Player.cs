@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Roguelike.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace CsharpProjects.Class
             sym = 'P';
             tag = "Player";
             maxHP = 4;
+            weapon = new Sword();
             //position = null;
         }
         public Player(Position spawn_position):base(spawn_position)
@@ -29,7 +31,7 @@ namespace CsharpProjects.Class
 
         internal void Move(Position array)
         {
-            if (!Game.is_it_empty(position + array))
+            if (!Game.IsItEmpty(position + array))
                 return;
             int x = -1;
             for (int i = 0; i < ControllerPlayer._move.Length; i++)

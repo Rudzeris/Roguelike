@@ -49,7 +49,7 @@ namespace CsharpProjects.Class
             if(Game._player != null)
                 if (array + position == Game._player.position)
                     Hit(Game._player);
-            if (!Game.is_it_empty(position + array))
+            if (!Game.IsItEmpty(position + array))
                 return;
             int x = -1;
             for (int i = 0; i < ControllerEnemy._move.Length; i++)

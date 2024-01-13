@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Roguelike.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,8 @@ namespace CsharpProjects.Class
         static internal uint distance_view;
         public uint maxHP { get; protected set; }
         public uint hp { get; protected set; }
+
+        internal Weapon weapon { get; private protected set; }
 
         internal Person()
         {
@@ -41,6 +44,7 @@ namespace CsharpProjects.Class
 
         virtual internal void Hit(Person person)
         {
+            if(person==null) return;
             person.Damage();
         }
 
