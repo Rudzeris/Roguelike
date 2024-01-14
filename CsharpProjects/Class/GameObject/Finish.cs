@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal class Win
+    internal class Finish:Empty
     {
+        internal Finish()
+        {
+            sym = '@';
+        }
     }
 }

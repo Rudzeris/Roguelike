@@ -24,9 +24,9 @@ namespace Roguelike
 
         static internal uint _timer { get; private set; }
 
-        static internal uint _move_speed_enemy {get; private set; }
-        static internal uint _move_speed_player {get; private set; }
-        static internal uint _move_speed_arrow {get; private set; }
+        static internal uint _move_speed_enemy { get; private set; }
+        static internal uint _move_speed_player { get; private set; }
+        static internal uint _move_speed_arrow { get; private set; }
 
         public static void NewGame()
         {
@@ -71,9 +71,9 @@ namespace Roguelike
         internal static bool IsEnemy(Position position)
         {
             if (_enemies.Count < 1) return false;
-            foreach(var enemy in _enemies)
+            foreach (var enemy in _enemies)
             {
-                if(enemy.position == position) return true;
+                if (enemy.position == position) return true;
             }
             return false;
         }
@@ -103,6 +103,10 @@ namespace Roguelike
         private void ConductPlayer()
         {
             ControllerPlayer.Conduct(_player);
+            if (_map.IsItFinish(_player))
+            {
+                NewGame();
+            }
         }
 
         private void ConductEnemies()
@@ -116,8 +120,8 @@ namespace Roguelike
 
         private void MoveArrows()
         {
-            if(_arrows.Count < 1) return;
-            for(int i = 0;i<_arrows.Count;i++)
+            if (_arrows.Count < 1) return;
+            for (int i = 0; i < _arrows.Count; i++)
             {
                 if (!_arrows[i].Move())
                 {
@@ -127,10 +131,10 @@ namespace Roguelike
         }
         private void Monitoring()
         {
-            _monitor.Monitoring(_map.map, 10,_player, _enemies.ToList<Person>(),_arrows.ToList<GameObject>());
+            _monitor.Monitoring(_map.map, 10, _player, _enemies.ToList<Person>(), _arrows.ToList<GameObject>());
         }
 
-        static internal bool IsItEmpty(Position new_position,bool search_person = true)
+        static internal bool IsItEmpty(Position new_position, bool search_person = true)
         {
             if (!(new_position.x > 0 && new_position.x < _map.n - 1 && new_position.y > 0 && new_position.y < _map.m))
                 return false;
@@ -145,7 +149,7 @@ namespace Roguelike
                     if (_enemies[i].position == new_position)
                         return false;
                 }
-                if(_player!=null)
+                if (_player != null)
                     if (_player.position == new_position)
                         return false;
             }

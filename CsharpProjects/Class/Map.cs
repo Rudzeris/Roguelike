@@ -11,6 +11,7 @@ namespace Roguelike
         internal List<List<GameObject>> map;
 
         internal Position spawn_player { get; private set; }
+        internal Position finish_position{ get; private set; }
         internal List<Position> spawn_enemies { get; private set; }
 
         internal int n { get; private set; }
@@ -27,6 +28,11 @@ namespace Roguelike
             spawn_player = new Position(
                 1 + 2 * Game._rand.Next(0, (n - 2) / 2),
                 1 + 2 * Game._rand.Next(0, (m - 2) / 2)
+                );
+
+            finish_position = new Position(
+                1+((n-2)-spawn_player.x),
+                1+((m-2)-spawn_player.y)
                 );
 
             int radius = 4;
@@ -82,6 +88,7 @@ namespace Roguelike
                     if (map[i][j] == null) map[i][j] = new Wall();
                 }
             }
+            map[finish_position.x][finish_position.y] = new Finish();
         }
 
         private void CreateRoad(int i, int j)
@@ -146,6 +153,18 @@ namespace Roguelike
                         break;
                 }
             }
+        }
+
+        internal bool IsItFinish(Player player) 
+        {
+            if (player != null)
+            {
+                if(player.position == finish_position)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool IsItEmpty(Position newPosition) // нет применения
