@@ -13,15 +13,17 @@ namespace Roguelike
         public uint maxHP { get; protected set; }
         public uint hp { get; protected set; }
 
-        internal Weapon weapon { get; private protected set; }
+        internal Bow ?weapon { get; private protected set; }
 
         internal Person()
         {
+            weapon = null;
             distance_view = 3;
             maxHP = 1; hp = 1;
         }
         internal Person(Position spawn_position)
         {
+            weapon = null;
             distance_view = 3;
             this.spawn_position = spawn_position;
             this.position = new Position(spawn_position);

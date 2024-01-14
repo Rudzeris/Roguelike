@@ -14,6 +14,7 @@ namespace Roguelike
             tag = "Enemy";
             maxHP = 1;
             hp = maxHP;
+            weapon = null;
         }
         override internal void Spawn()
         {

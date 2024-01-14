@@ -44,13 +44,13 @@ namespace Roguelike
                         break;
                     case ConsoleKey.Spacebar:
                         if (player == null) break;
-                        foreach(var move in _move)
+                        foreach (var move in _move)
                         {
                             if (Game.IsEnemy(move + player.position))
                             {
-                                Enemy enemy=null;
+                                Enemy enemy = null;
                                 foreach (var _enemy in Game._enemies)
-                                    if(_enemy.position == (player.position+move))
+                                    if (_enemy.position == (player.position + move))
                                         enemy = _enemy;
                                 player.Hit(enemy);
                                 break;
@@ -107,7 +107,7 @@ namespace Roguelike
             // Пустим лучи в разные стороны и проверим где игру, если игрока нашли - пойти к нему
             uint temp;
             uint minimum = Enemy.distance_view;
-            Position true_position = new Position(0, 0);
+            Position directionT = new Position(0, 0);
             foreach (var move in _move)
             {
                 if (!Game.IsItEmpty(enemy.position + move, false))
@@ -116,9 +116,10 @@ namespace Roguelike
                 if (temp < minimum)
                 {
                     minimum = temp;
-                    true_position = move;
+                    directionT = move;
                 }
             }
+            bool attacking = false;
             if (minimum == Enemy.distance_view)
             {
                 bool[] bl = { true, true, true, true };
@@ -136,15 +137,31 @@ namespace Roguelike
                     bl[sl] = false;
                     if (Game.IsItEmpty(enemy.position + _move[sl]))
                     {
-                        true_position = _move[sl];
+                        directionT = _move[sl];
                         break;
                     }
                 }
+                //if (Game._rand.Next(0, 1) % 2 == 0 && Game.IsItEmpty(enemy.position + directionT))
+                //    enemy.weapon?.Attack(enemy.position + directionT, directionT);
             }
-            // если луч ничего не дал, то ходим в случайное свободное место
+            else
+                attacking = true;
 
-            if (Game.IsItEmpty(enemy.position + true_position, false))
-                enemy.Conduct(true_position);
+            if (!attacking)
+            {
+                if (Game.IsItEmpty(enemy.position + directionT, false))
+                    enemy.Conduct(directionT);
+            }
+            else
+            {
+                if (enemy.weapon != null)
+                    enemy.weapon.Attack(enemy.position, directionT);
+                else
+                if (Game.IsItEmpty(enemy.position + directionT, false))
+                    enemy.Conduct(directionT);
+            }
+            
+            
         }
     }
 }

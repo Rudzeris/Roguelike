@@ -11,7 +11,7 @@ namespace Roguelike
         public Wall()
         {
             sym = '#';
-            f = false;
+            //f = false;
             tag = typeof(Wall).Name;
             //position = null;
         }

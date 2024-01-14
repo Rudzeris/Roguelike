@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal class Sword:Weapon
+    internal class Sword:Bow
     {
     }
 }

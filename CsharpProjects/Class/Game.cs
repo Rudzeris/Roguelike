@@ -10,6 +10,7 @@ namespace Roguelike
     {
         static public Random _rand = new Random();
         static internal List<Enemy> _enemies { set; get; }
+        static internal List<Arrow> _arrows { set; get; }
         static internal Player _player { set; get; }
         static internal Monitor _monitor { set; get; }
 
@@ -25,6 +26,7 @@ namespace Roguelike
 
         static internal uint _move_speed_enemy {get; private set; }
         static internal uint _move_speed_player {get; private set; }
+        static internal uint _move_speed_arrow {get; private set; }
 
         public static void NewGame()
         {
@@ -44,6 +46,7 @@ namespace Roguelike
             _map = new Map();
             SpawnPlayer();
             _enemies = new List<Enemy>();
+            _arrows = new List<Arrow>();
             _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric();
             _player = new Player(_map.spawn_player);
@@ -52,6 +55,7 @@ namespace Roguelike
             _timer = 0;
             _move_speed_enemy = 80;
             _move_speed_player = 10;
+            _move_speed_arrow = 10;
             _count_enemy_on_the_map = 5;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
@@ -90,13 +94,10 @@ namespace Roguelike
                 ConductEnemies();
             if (_timer % _move_speed_player == 0)
                 ConductPlayer();
+            if (_timer % _move_speed_arrow == 0)
+                MoveArrows();
             Thread.Sleep(1);
             _timer++;
-        }
-
-        private void Intersection(Position position)
-        {
-
         }
 
         private void ConductPlayer()
@@ -113,9 +114,20 @@ namespace Roguelike
             }
         }
 
+        private void MoveArrows()
+        {
+            if(_arrows.Count < 1) return;
+            for(int i = 0;i<_arrows.Count;i++)
+            {
+                if (!_arrows[i].Move())
+                {
+                    i--;
+                }
+            }
+        }
         private void Monitoring()
         {
-            _monitor.Monitoring(_map.map, 10,_player, _enemies.ToList<Person>());
+            _monitor.Monitoring(_map.map, 10,_player, _enemies.ToList<Person>(),_arrows.ToList<GameObject>());
         }
 
         static internal bool IsItEmpty(Position new_position,bool search_person = true)

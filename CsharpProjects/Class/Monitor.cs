@@ -15,9 +15,10 @@ namespace Roguelike
 
         internal void Monitoring(List<List<GameObject>> _map,uint speed=10,
             Person? _player = null,
-            List<Person>? _enemies = null)
+            List<Person>? _enemies = null,
+            List<GameObject> _arrows = null)
         {
-            DrawMap(_map, _player, _enemies);
+            DrawMap(_map, _player, _enemies,_arrows);
         }
 
         internal void DrawTimer()
@@ -32,7 +33,8 @@ namespace Roguelike
         }
         internal void DrawMap(List<List<GameObject>> _map,
             Person? _player = null,
-            List<Person>? _enemies = null)
+            List<Person>? _enemies = null,
+            List<GameObject> _arrows = null)
         {
             if (_map == null) return;
             // copy map
@@ -58,6 +60,14 @@ namespace Roguelike
                 if (_player != null)
                 {
                     map[_player.position.x][_player.position.y] = _player;
+                }
+
+                if (_arrows != null)
+                {
+                    foreach (var arrow in _arrows)
+                    {
+                        map[arrow.position.x][arrow.position.y] = arrow;
+                    }
                 }
             }
             count_update=(count_update+1)%Game.FPS;

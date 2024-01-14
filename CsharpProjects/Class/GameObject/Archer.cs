@@ -8,10 +8,11 @@ namespace Roguelike
 {
     internal class Archer : Enemy
     {
-
         public Archer(Position spawn_position):base(spawn_position)
         {
             sym = 'A';
+            weapon = new Bow();
+            distance_view = 5;
         }
     }
 }

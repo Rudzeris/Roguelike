@@ -11,7 +11,7 @@ namespace Roguelike
         internal Position position { get; private protected set; }
         internal Position spawn_position { get; private protected set; }
         protected char sym = ' ';
-        protected bool f = true;
+        //protected bool f = true;
         public string tag = "None";
         
         public bool Intersection(GameObject game_object)
