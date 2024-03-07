@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Roguelike.Class.Map
+namespace Roguelike
 {
     internal class Map
     {
         internal List<List<GameObject>> map;
 
-        internal Vector2 spawn_player { get; private set; }
-        internal Vector2 finish_position { get; private set; }
-        internal List<Vector2> spawn_enemies { get; private set; }
+        internal Position spawn_player { get; private set; }
+        internal Position finish_position{ get; private set; }
+        internal List<Position> spawn_enemies { get; private set; }
 
         internal int n { get; private set; }
         internal int m { get; private set; }
@@ -25,32 +25,32 @@ namespace Roguelike.Class.Map
             n = 13;
             m = 25;
 
-            spawn_player = new Vector2(
+            spawn_player = new Position(
                 1 + 2 * Game._rand.Next(0, (n - 2) / 2),
                 1 + 2 * Game._rand.Next(0, (m - 2) / 2)
                 );
 
-            finish_position = new Vector2(
-                1 + (n - 2 - spawn_player.x),
-                1 + (m - 2 - spawn_player.y)
+            finish_position = new Position(
+                1+((n-2)-spawn_player.x),
+                1+((m-2)-spawn_player.y)
                 );
 
             int radius = 4;
-            spawn_enemies = new List<Vector2>();
-            for (int i = 1; i < n - 1; i += 4)
+            spawn_enemies = new List<Position>();
+            for(int i = 1; i < n-1; i += 4)
             {
-                for (int j = 1; j < m - 1; j += 4)
+                for(int j = 1; j < m-1;  j += 4)
                 {
-                    if (Math.Pow(spawn_player.x - i, 2) +
+                    if (Math.Pow(spawn_player.x - i, 2)+
                         Math.Pow(spawn_player.y - j, 2) > radius)
                     {
-                        spawn_enemies.Add(new Vector2(i, j));
+                        spawn_enemies.Add(new Position(i, j));
                     }
                 }
             }
 
             map?.Clear();
-            map = new List<List<GameObject>>();
+            map=new List<List<GameObject>>();
             for (int i = 0; i < n; i++)
             {
                 List<GameObject> row = new List<GameObject>();
@@ -154,16 +154,41 @@ namespace Roguelike.Class.Map
                 }
             }
         }
-        internal bool IsItFinish(Player player)
+
+        internal bool IsItFinish(Player player) 
         {
             if (player != null)
             {
-                if (player.position == finish_position)
+                if(player.position == finish_position)
                 {
                     return true;
                 }
             }
             return false;
+        }
+
+        public bool IsItEmpty(Position newPosition) // нет применения
+        {
+            if (newPosition.x >= n || newPosition.y >= m) return false;
+            if (map[newPosition.x][newPosition.y] == null) return false;
+            if (Empty.GetSymSt() == map[newPosition.x][newPosition.y].GetSym())
+            {
+                return true;
+            }
+            return false;
+        }
+        private void ClearMap() // нет применения
+        {
+            for (int i = 1; i < n; i++)
+            {
+                for (int j = 1; j < m; j++)
+                {
+                    if (map[i][j] == null)
+                        map[i][j] = new Empty();
+                    else if (map[i][j].tag != typeof(Wall).Name && map[i][j].tag != typeof(Empty).Name)
+                        map[i][j] = new Empty();
+                }
+            }
         }
     }
 }

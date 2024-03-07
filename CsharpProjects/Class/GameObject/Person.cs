@@ -21,12 +21,12 @@ namespace Roguelike
             distance_view = 3;
             maxHP = 1; hp = 1;
         }
-        internal Person(Vector2 spawn_position)
+        internal Person(Position spawn_position)
         {
             weapon = null;
             distance_view = 3;
             this.spawn_position = spawn_position;
-            this.position = new Vector2(spawn_position);
+            this.position = new Position(spawn_position);
         }
         virtual internal void Spawn()
         {

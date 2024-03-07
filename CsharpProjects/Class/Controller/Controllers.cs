@@ -11,11 +11,11 @@ namespace Roguelike
 
     static internal class ControllerPlayer
     {
-        static internal Vector2[] _move { get; private set; } = {
-            new Vector2(-1, 0), // up
-            new Vector2(0, -1), // left
-            new Vector2(1, 0), // down
-            new Vector2(0, 1) // right
+        static internal Position[] _move { get; private set; } = {
+            new Position(-1, 0), // up
+            new Position(0, -1), // left
+            new Position(1, 0), // down
+            new Position(0, 1) // right
         };
         static internal void Conduct(Player player)
         {
@@ -68,14 +68,14 @@ namespace Roguelike
     }
     static internal class ControllerEnemy
     {
-        static internal Vector2[] _move { get; private set; } = {
-            new Vector2(-1, 0), // up
-            new Vector2(0, -1), // left
-            new Vector2(1, 0), // down
-            new Vector2(0, 1) // right
+        static internal Position[] _move { get; private set; } = {
+            new Position(-1, 0), // up
+            new Position(0, -1), // left
+            new Position(1, 0), // down
+            new Position(0, 1) // right
         };
 
-        static internal uint TracerPlayer(Vector2 position, Vector2 old_position, uint length = 0)
+        static internal uint TracerPlayer(Position position, Position old_position, uint length = 0)
         {
             if (Game._player == null)
                 return length;
@@ -85,14 +85,14 @@ namespace Roguelike
                 return length;
             uint temp;
             uint minimum = Enemy.distance_view;
-            Vector2 true_position = position;
+            Position true_position = position;
             foreach (var move in _move)
             {
                 if (position + move != old_position)
                 {
                     if (!Game.IsItEmpty(position + move, false))
                         continue;
-                    temp = TracerPlayer(new Vector2(position + move), position, length + 1);
+                    temp = TracerPlayer(new Position(position + move), position, length + 1);
                     if (temp != Enemy.distance_view && temp < minimum)
                     {
                         minimum = temp;
@@ -107,7 +107,7 @@ namespace Roguelike
             // Пустим лучи в разные стороны и проверим где игру, если игрока нашли - пойти к нему
             uint temp;
             uint minimum = Enemy.distance_view;
-            Vector2 directionT = new Vector2(0, 0);
+            Position directionT = new Position(0, 0);
             foreach (var move in _move)
             {
                 if (!Game.IsItEmpty(enemy.position + move, false))

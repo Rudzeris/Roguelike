@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Roguelike.Class.Map;
 
 namespace Roguelike
 {
@@ -13,7 +12,7 @@ namespace Roguelike
         static internal List<Enemy> _enemies { set; get; }
         static internal List<Arrow> _arrows { set; get; }
         static internal Player _player { set; get; }
-        static internal Monitoring _monitoring { set; get; }
+        static internal Monitor _monitor { set; get; }
 
         static internal uint _count_enemy_on_the_map;
 
@@ -48,10 +47,10 @@ namespace Roguelike
             SpawnPlayer();
             _enemies = new List<Enemy>();
             _arrows = new List<Arrow>();
+            _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric();
             _player = new Player(_map.spawn_player);
             _player.Spawn();
-            _monitoring = new Monitoring(_map.map, _player, _enemies, _arrows);
             FPS = 20;
             _timer = 0;
             _move_speed_enemy = 80;
@@ -69,7 +68,7 @@ namespace Roguelike
 
         }
 
-        internal static bool IsEnemy(Vector2 position)
+        internal static bool IsEnemy(Position position)
         {
             if (_enemies.Count < 1) return false;
             foreach (var enemy in _enemies)
@@ -89,7 +88,8 @@ namespace Roguelike
 
         public void Update()
         {
-            _monitoring.Update();
+
+            Monitoring();
             if (_timer % _move_speed_enemy == 0)
                 ConductEnemies();
             if (_timer % _move_speed_player == 0)
@@ -129,8 +129,12 @@ namespace Roguelike
                 }
             }
         }
+        private void Monitoring()
+        {
+            _monitor.Monitoring(_map.map, 10, _player, _enemies.ToList<Person>(), _arrows.ToList<GameObject>());
+        }
 
-        static internal bool IsItEmpty(Vector2 new_position, bool search_person = true)
+        static internal bool IsItEmpty(Position new_position, bool search_person = true)
         {
             if (!(new_position.x > 0 && new_position.x < _map.n - 1 && new_position.y > 0 && new_position.y < _map.m))
                 return false;
