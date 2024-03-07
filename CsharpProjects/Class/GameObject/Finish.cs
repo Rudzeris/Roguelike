@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal class Finish : Empty
+    internal class Finish:Empty
     {
         internal Finish()
         {

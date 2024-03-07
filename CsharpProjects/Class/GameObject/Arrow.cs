@@ -9,11 +9,11 @@ namespace Roguelike
 {
     internal class Arrow : GameObject
     {
-        private Vector2 direction;
+        private Position direction;
 
         private bool friend_arrow;
 
-        public Arrow(Vector2 spawn_position, Vector2 direction, bool friend_arrow)
+        public Arrow(Position spawn_position, Position direction, bool friend_arrow)
         {
             this.spawn_position = spawn_position;
             this.direction = direction;
@@ -24,7 +24,7 @@ namespace Roguelike
         }
         internal bool Move()
         {
-            if (Game.IsEnemy(position) && friend_arrow)
+            if (Game.IsEnemy(position) && this.friend_arrow)
             {
                 foreach (var enemy in Game._enemies)
                 {
@@ -41,17 +41,16 @@ namespace Roguelike
             {
                 if (Game._player != null)
                 {
-                    if (this.position == Game._player.position && !friend_arrow)
+                    if (this.position == Game._player.position && !this.friend_arrow)
                     {
                         Game._player?.Damage();
-
+                        
                         Destruct();
                         return false;
                     }
                 }
             }
-            if (Game.IsItEmpty(position + direction, false))
-            {
+            if(Game.IsItEmpty(position + direction,false)){
                 position += direction;
                 return true;
             }

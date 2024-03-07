@@ -14,22 +14,22 @@ namespace Roguelike
             base.Spawn();
             Game._player = this;
         }
-        public Player() : base()
+        public Player():base()
         {
             sym = 'P';
             tag = "Player";
             maxHP = 4;
-            //weapon = new Sword();
+            weapon = new Sword();
             //position = null;
         }
-        public Player(Vector2 spawn_position) : base(spawn_position)
+        public Player(Position spawn_position):base(spawn_position)
         {
             sym = 'P';
             tag = "Player";
             maxHP = 4;
         }
 
-        internal void Move(Vector2 array)
+        internal void Move(Position array)
         {
             if (!Game.IsItEmpty(position + array))
                 return;
