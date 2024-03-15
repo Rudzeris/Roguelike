@@ -53,9 +53,9 @@ namespace Roguelike
             if (!Game.IsItEmpty(position + array))
                 return;
             int x = -1;
-            for (int i = 0; i < ControllerEnemy._move.Length; i++)
+            for (int i = 0; i < EnemyController._move.Length; i++)
             {
-                if (ControllerEnemy._move[i] == array)
+                if (EnemyController._move[i] == array)
                 {
                     x = i;
                     break;
