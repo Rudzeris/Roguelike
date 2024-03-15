@@ -1,4 +1,4 @@
-﻿using Roguelike.Class;
+﻿using Roguelike;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,9 +34,9 @@ namespace Roguelike
             if (!Game.IsItEmpty(position + array))
                 return;
             int x = -1;
-            for (int i = 0; i < ControllerPlayer._move.Length; i++)
+            for (int i = 0; i < PlayerController._move.Length; i++)
             {
-                if (ControllerPlayer._move[i] == array)
+                if (PlayerController._move[i] == array)
                 {
                     x = i;
                     break;

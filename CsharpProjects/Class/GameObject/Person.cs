@@ -1,4 +1,4 @@
-﻿using Roguelike.Class;
+﻿using Roguelike;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,19 +54,19 @@ namespace Roguelike
         
         private protected void MoveUp()
         {
-            position += ControllerEnemy._move[0];
+            position += EnemyController._move[0];
         }
         private protected void MoveLeft()
         {
-            position += ControllerEnemy._move[1];
+            position += EnemyController._move[1];
         }
         private protected void MoveDown()
         {
-            position += ControllerEnemy._move[2];
+            position += EnemyController._move[2];
         }
         private protected void MoveRight()
         {
-            position += ControllerEnemy._move[3];
+            position += EnemyController._move[3];
         }
 
         //public bool life { get; private set; }

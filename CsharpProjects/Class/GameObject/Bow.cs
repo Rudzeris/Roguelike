@@ -1,4 +1,4 @@
-﻿using Roguelike.Class;
+﻿using Roguelike;
 using System;
 using System.Collections.Generic;
 using System.Linq;

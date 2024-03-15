@@ -89,7 +89,7 @@ namespace Roguelike
         public void Update()
         {
 
-            Monitoring();
+            if(_timer % _move_speed_arrow==0) Monitoring();
             if (_timer % _move_speed_enemy == 0)
                 ConductEnemies();
             if (_timer % _move_speed_player == 0)
@@ -102,7 +102,7 @@ namespace Roguelike
 
         private void ConductPlayer()
         {
-            ControllerPlayer.Conduct(_player);
+            PlayerController.Conduct(_player);
             if (_map.IsItFinish(_player))
             {
                 NewGame();
@@ -114,7 +114,7 @@ namespace Roguelike
             if (_enemies.Count < 1) return;
             foreach (var enemy in _enemies)
             {
-                ControllerEnemy.Conduct(enemy);
+                EnemyController.Conduct(enemy);
             }
         }
 
