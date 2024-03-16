@@ -13,7 +13,7 @@ namespace Roguelike
         internal uint distance_attack { get; private protected set; }
         private uint debuff = 200;
         private uint attack_time=0;
-        internal void Attack(Position spawn_position,Position direction, bool friend_arrow = false)
+        internal void Attack(Vector2 spawn_position,Vector2 direction, bool friend_arrow = false)
         {
             if (Game._timer-attack_time>debuff) { 
                 attack_time = Game._timer;

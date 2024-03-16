@@ -8,11 +8,11 @@ namespace Roguelike
 {
     static internal class PlayerController
     {
-        static internal Position[] _move { get; private set; } = {
-            new Position(-1, 0), // up
-            new Position(0, -1), // left
-            new Position(1, 0), // down
-            new Position(0, 1) // right
+        static internal Vector2[] _move { get; private set; } = {
+            new Vector2(-1, 0), // up
+            new Vector2(0, -1), // left
+            new Vector2(1, 0), // down
+            new Vector2(0, 1) // right
         };
         static internal void Conduct(Player player)
         {
