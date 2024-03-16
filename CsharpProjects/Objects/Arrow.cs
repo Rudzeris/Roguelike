@@ -9,11 +9,11 @@ namespace Roguelike
 {
     internal class Arrow : GameObject
     {
-        private Position direction;
+        private Vector2 direction;
 
         private bool friend_arrow;
 
-        public Arrow(Position spawn_position, Position direction, bool friend_arrow)
+        public Arrow(Vector2 spawn_position, Vector2 direction, bool friend_arrow)
         {
             this.spawn_position = spawn_position;
             this.direction = direction;

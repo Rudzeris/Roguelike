@@ -8,7 +8,7 @@ namespace Roguelike
 {
     internal abstract class Enemy : Person
     {
-        public Enemy(Position spawn_position) : base(spawn_position)
+        public Enemy(Vector2 spawn_position) : base(spawn_position)
         {
             sym = 'X';
             tag = "Enemy";
@@ -45,7 +45,7 @@ namespace Roguelike
                 position=new_position;
         }*/
 
-        internal void Conduct(Position array)
+        internal void Conduct(Vector2 array)
         {
             if(Game._player != null)
                 if (array + position == Game._player.position)

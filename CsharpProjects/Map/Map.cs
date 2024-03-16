@@ -11,51 +11,53 @@ namespace Roguelike
     {
         internal List<List<GameObject>> map;
 
-        internal Position spawn_player { get; private set; }
-        internal Position finish_position{ get; private set; }
-        internal List<Position> spawn_enemies { get; private set; }
+        internal Vector2 spawn_player { get; private set; }
+        internal Vector2 finish_position{ get; private set; }
+        internal List<Vector2> spawn_enemies { get; private set; }
 
-        internal int n { get; private set; }
-        internal int m { get; private set; }
-        public Map()
+        internal int _height { get; private set; }
+        internal int _width { get; private set; }
+        public Map(int height, int width)
         {
-            Create();
+            Create(height, width);
         }
-        public void Create()
+        public void Create(int height, int width)
         {
-            n = 13;
-            m = 25;
+            if (height < 0 || width < 0) return;
 
-            spawn_player = new Position(
-                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
-                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
+            _height = 13;
+            _width = 25;
+
+            spawn_player = new Vector2(
+                1 + 2 * Game._rand.Next(0, (_height - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (_width - 2) / 2)
                 );
 
-            finish_position = new Position(
-                1+((n-2)-spawn_player.x),
-                1+((m-2)-spawn_player.y)
+            finish_position = new Vector2(
+                1+((_height-2)-spawn_player.x),
+                1+((_width-2)-spawn_player.y)
                 );
 
             int radius = 4;
-            spawn_enemies = new List<Position>();
-            for(int i = 1; i < n-1; i += 4)
+            spawn_enemies = new List<Vector2>();
+            for(int i = 1; i < _height-1; i += 4)
             {
-                for(int j = 1; j < m-1;  j += 4)
+                for(int j = 1; j < _width-1;  j += 4)
                 {
                     if (Math.Pow(spawn_player.x - i, 2)+
                         Math.Pow(spawn_player.y - j, 2) > radius)
                     {
-                        spawn_enemies.Add(new Position(i, j));
+                        spawn_enemies.Add(new Vector2(i, j));
                     }
                 }
             }
 
             map?.Clear();
             map=new List<List<GameObject>>();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < _height; i++)
             {
                 List<GameObject> row = new List<GameObject>();
-                for (int j = 0; j < m; j++)
+                for (int j = 0; j < _width; j++)
                 {
                     row.Add(null);
                 }
@@ -63,28 +65,28 @@ namespace Roguelike
             }
 
             // Создаем стены по краям
-            for (int i = 1; i < n - 1; i++)
+            for (int i = 1; i < _height - 1; i++)
             {
                 map[i][0] = new Wall();
-                map[i][m - 1] = new Wall();
+                map[i][_width - 1] = new Wall();
 
             }
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < _width; i++)
             {
                 map[0][i] = new Wall();
-                map[n - 1][i] = new Wall();
+                map[_height - 1][i] = new Wall();
             }
 
             // Создаем дороги с помощью рекурсивной функции
             CreateRoad(
-                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
-                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
+                1 + 2 * Game._rand.Next(0, (_height - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (_width - 2) / 2)
                 );
 
             // Добавляем стены внутри лабиринта
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < _height; i++)
             {
-                for (int j = 0; j < m; j++)
+                for (int j = 0; j < _width; j++)
                 {
                     if (map[i][j] == null) map[i][j] = new Wall();
                 }
@@ -102,6 +104,12 @@ namespace Roguelike
             // 3 1 4 2
             // 0 0 1 1
             // пойти в 1
+
+            //Vector2[] directions =
+            //{
+            //    new Vector2( 0,-1), new Vector2(-1,0), new Vector2(0,1), new Vector2(1, 0)
+            //};
+
             for (int q = 4; q > 0; q--)
             {
                 sl = Game._rand.Next(q);
@@ -110,6 +118,16 @@ namespace Roguelike
                     if (!bl[k]) sl++;
                 }
                 bl[sl] = false;
+
+                //if (i + directions[sl].y * 2 > 0 && j + directions[sl].x * 2 > 0)
+                //{
+                //    if (map[i + directions[sl].y * 2][j + directions[sl].x * 2] == null)
+                //    {
+                //        map[i + directions[sl].y][j + directions[sl].x] = new Empty();
+                //        CreateRoad(i + directions[sl].y * 2, j + directions[sl].x);
+                //    }
+                //}
+
                 switch (sl)
                 {
                     case 0: // Север
@@ -133,7 +151,7 @@ namespace Roguelike
                         }
                         break;
                     case 2: // Юг
-                        if (i + 2 < n - 1)
+                        if (i + 2 < _height - 1)
                         {
                             if (map[i + 2][j] == null)
                             {
@@ -143,7 +161,7 @@ namespace Roguelike
                         }
                         break;
                     case 3: // Восток
-                        if (j + 2 < m - 1)
+                        if (j + 2 < _width - 1)
                         {
                             if (map[i][j + 2] == null)
                             {
@@ -168,9 +186,9 @@ namespace Roguelike
             return false;
         }
 
-        public bool IsItEmpty(Position newPosition) // нет применения
+        public bool IsItEmpty(Vector2 newPosition) // нет применения
         {
-            if (newPosition.x >= n || newPosition.y >= m) return false;
+            if (newPosition.x >= _height || newPosition.y >= _width) return false;
             if (map[newPosition.x][newPosition.y] == null) return false;
             if (Empty.GetSymSt() == map[newPosition.x][newPosition.y].GetSym())
             {
@@ -180,9 +198,9 @@ namespace Roguelike
         }
         private void ClearMap() // нет применения
         {
-            for (int i = 1; i < n; i++)
+            for (int i = 1; i < _height; i++)
             {
-                for (int j = 1; j < m; j++)
+                for (int j = 1; j < _width; j++)
                 {
                     if (map[i][j] == null)
                         map[i][j] = new Empty();

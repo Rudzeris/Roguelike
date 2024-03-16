@@ -31,7 +31,7 @@ namespace Roguelike
 
         public static void NewGame()
         {
-            _map.Create();
+            _map.Create(13,25);
             _enemies.Clear();
             _player = new Player(_map.spawn_player);
             _player.Spawn();
@@ -44,7 +44,7 @@ namespace Roguelike
 
         public void Start()
         {
-            _map = new Map();
+            _map = new Map(13,25);
             SpawnPlayer();
             _enemies = new List<Enemy>();
             _arrows = new List<Arrow>();
@@ -69,7 +69,7 @@ namespace Roguelike
 
         }
 
-        internal static bool IsEnemy(Position position)
+        internal static bool IsEnemy(Vector2 position)
         {
             if (_enemies.Count < 1) return false;
             foreach (var enemy in _enemies)
@@ -135,9 +135,9 @@ namespace Roguelike
             _monitor.Monitoring(_map.map, 10, _player, _enemies.ToList<Person>(), _arrows.ToList<GameObject>());
         }
 
-        static internal bool IsItEmpty(Position new_position, bool search_person = true)
+        static internal bool IsItEmpty(Vector2 new_position, bool search_person = true)
         {
-            if (!(new_position.x > 0 && new_position.x < _map.n - 1 && new_position.y > 0 && new_position.y < _map.m))
+            if (!(new_position.x > 0 && new_position.x < _map._height - 1 && new_position.y > 0 && new_position.y < _map._width))
                 return false;
             if (_map.map[new_position.x][new_position.y] is not Empty)
             {

@@ -8,7 +8,7 @@ namespace Roguelike
 {
     internal class Warrior:Enemy
     {
-        public Warrior(Position spawn_position):base(spawn_position)
+        public Warrior(Vector2 spawn_position):base(spawn_position)
         {
             sym = 'W';
         }

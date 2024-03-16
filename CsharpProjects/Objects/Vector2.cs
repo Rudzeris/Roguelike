@@ -6,34 +6,34 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal struct Position
+    internal struct Vector2
     {
         public int x, y;
-        public Position(int x, int y)
+        public Vector2(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
-        public Position(Position temp)
+        public Vector2(Vector2 temp)
         {
             this.x=temp.x;
             this.y=temp.y;
         }
-        public static bool operator !=(Position pos1, Position pos2)
+        public static bool operator !=(Vector2 pos1, Vector2 pos2)
         {
             return !(pos1 == pos2);
         }
-        public static bool operator ==(Position pos1, Position pos2)
+        public static bool operator ==(Vector2 pos1, Vector2 pos2)
         {
             return pos1.x == pos2.x && pos1.y == pos2.y;
         }
-        public static Position operator +(Position pos1, Position pos2)
+        public static Vector2 operator +(Vector2 pos1, Vector2 pos2)
         {
-            return new Position(pos1.x + pos2.x, pos1.y + pos2.y);
+            return new Vector2(pos1.x + pos2.x, pos1.y + pos2.y);
         }
-        public static Position operator -(Position pos1, Position pos2)
+        public static Vector2 operator -(Vector2 pos1, Vector2 pos2)
         {
-            return new Position(pos1.x - pos2.x, pos1.y - pos2.y);
+            return new Vector2(pos1.x - pos2.x, pos1.y - pos2.y);
         }
         public override bool Equals(object obj)
         {
@@ -42,7 +42,7 @@ namespace Roguelike
                 return false;
             }
 
-            Position temp = (Position)obj;
+            Vector2 temp = (Vector2)obj;
             return x == temp.x && y == temp.y;
         }
         public override int GetHashCode()
