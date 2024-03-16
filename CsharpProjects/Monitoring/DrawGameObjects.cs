@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    internal class Monitor
+    internal class DrawGameObjects
     {
         uint flash_per_second = 1;
         uint count_update = 0;
