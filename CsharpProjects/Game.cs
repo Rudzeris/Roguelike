@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Roguelike;
 
 namespace Roguelike
 {
@@ -12,7 +13,7 @@ namespace Roguelike
         static internal List<Enemy> _enemies { set; get; }
         static internal List<Arrow> _arrows { set; get; }
         static internal Player _player { set; get; }
-        static internal Monitor _monitor { set; get; }
+        static internal DrawGameObjects _monitor { set; get; }
 
         static internal uint _count_enemy_on_the_map;
 
@@ -47,7 +48,7 @@ namespace Roguelike
             SpawnPlayer();
             _enemies = new List<Enemy>();
             _arrows = new List<Arrow>();
-            _monitor = new Monitor();
+            _monitor = new DrawGameObjects();
             _enemy_fabric = new EnemyFabric();
             _player = new Player(_map.spawn_player);
             _player.Spawn();
