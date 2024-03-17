@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace Rogalic
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
