@@ -1,5 +1,4 @@
-﻿using Roguelike.Class;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +15,7 @@ namespace Roguelike
         }
         public Player():base()
         {
-            sym = 'P';
+            symbol = 'P';
             tag = "Player";
             maxHP = 4;
             weapon = new Sword();
@@ -24,7 +23,7 @@ namespace Roguelike
         }
         public Player(Position spawn_position):base(spawn_position)
         {
-            sym = 'P';
+            symbol = 'P';
             tag = "Player";
             maxHP = 4;
         }

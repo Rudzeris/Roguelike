@@ -1,7 +1,7 @@
-﻿using Roguelike.Class;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,21 +10,21 @@ namespace Roguelike
     internal abstract class Person : GameObject
     {
         static internal uint distance_view;
-        public uint maxHP { get; protected set; }
-        public uint hp { get; protected set; }
+        private Position spawn_position { get; set; }
+        internal Position position { get; private set; }
+        public int maxHP { get; protected set; }
+        public int hp { get; protected set; }
 
         internal Bow ?weapon { get; private protected set; }
 
-        internal Person()
+        private protected Person(char symbol):base(symbol,false)
         {
             weapon = null;
             distance_view = 3;
             maxHP = 1; hp = 1;
         }
-        internal Person(Position spawn_position)
+        internal Person(Position spawn_position, char symbol) : this(symbol)
         {
-            weapon = null;
-            distance_view = 3;
             this.spawn_position = spawn_position;
             this.position = new Position(spawn_position);
         }
@@ -35,19 +35,18 @@ namespace Roguelike
         }
         abstract internal void Dead();
 
-        virtual internal void Damage()
+        virtual internal void Attack(Person person)
         {
-            hp--;
+            person?.Damage(1);
+        }
+
+        private void Damage(int i)
+        {
+            hp-=i;
             if (hp <= 0)
             {
                 Dead();
             }
-        }
-
-        virtual internal void Hit(Person person)
-        {
-            if(person==null) return;
-            person.Damage();
         }
 
         //abstract internal void Conduct();

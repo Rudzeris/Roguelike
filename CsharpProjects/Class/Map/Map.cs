@@ -1,47 +1,45 @@
-﻿using System;
+﻿using Roguelike;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Roguelike
 {
     internal class Map
     {
         internal List<List<GameObject>> map;
-
         internal Position spawn_player { get; private set; }
-        internal Position finish_position{ get; private set; }
+        internal Position finish_position { get; private set; }
         internal List<Position> spawn_enemies { get; private set; }
 
-        internal int n { get; private set; }
-        internal int m { get; private set; }
-        public Map()
-        {
-            Create();
-        }
-        public void Create()
-        {
-            n = 13;
-            m = 25;
+        internal int height { get; private set; }
+        internal int width { get; private set; }
 
+        public Map(int width, int height)
+        {
+            this.height = height < 3 ? 3 : height;
+            this.width = width < 3 ? 3 : width;
+            randomCreateMap();
+        }
+
+        public void randomCreateMap() // a a
+        {
             spawn_player = new Position(
-                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
-                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
+                1 + 2 * Game._rand.Next(0, (height - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (width - 2) / 2)
                 );
 
             finish_position = new Position(
-                1+((n-2)-spawn_player.x),
-                1+((m-2)-spawn_player.y)
+                1 + ((height - 2) - spawn_player.x),
+                1 + ((width - 2) - spawn_player.y)
                 );
 
             int radius = 4;
             spawn_enemies = new List<Position>();
-            for(int i = 1; i < n-1; i += 4)
+            for (int i = 1; i < height - 1; i += 4)
             {
-                for(int j = 1; j < m-1;  j += 4)
+                for (int j = 1; j < width - 1; j += 4)
                 {
-                    if (Math.Pow(spawn_player.x - i, 2)+
+                    if (Math.Pow(spawn_player.x - i, 2) +
                         Math.Pow(spawn_player.y - j, 2) > radius)
                     {
                         spawn_enemies.Add(new Position(i, j));
@@ -50,11 +48,11 @@ namespace Roguelike
             }
 
             map?.Clear();
-            map=new List<List<GameObject>>();
-            for (int i = 0; i < n; i++)
+            map = new List<List<GameObject>>();
+            for (int i = 0; i < height; i++)
             {
                 List<GameObject> row = new List<GameObject>();
-                for (int j = 0; j < m; j++)
+                for (int j = 0; j < width; j++)
                 {
                     row.Add(null);
                 }
@@ -62,28 +60,28 @@ namespace Roguelike
             }
 
             // Создаем стены по краям
-            for (int i = 1; i < n - 1; i++)
+            for (int i = 1; i < height - 1; i++)
             {
                 map[i][0] = new Wall();
-                map[i][m - 1] = new Wall();
+                map[i][width - 1] = new Wall();
 
             }
-            for (int i = 0; i < m; i++)
+            for (int i = 0; i < width; i++)
             {
                 map[0][i] = new Wall();
-                map[n - 1][i] = new Wall();
+                map[height - 1][i] = new Wall();
             }
 
             // Создаем дороги с помощью рекурсивной функции
             CreateRoad(
-                1 + 2 * Game._rand.Next(0, (n - 2) / 2),
-                1 + 2 * Game._rand.Next(0, (m - 2) / 2)
+                1 + 2 * Game._rand.Next(0, (height - 2) / 2),
+                1 + 2 * Game._rand.Next(0, (width - 2) / 2)
                 );
 
             // Добавляем стены внутри лабиринта
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < m; j++)
+                for (int j = 0; j < width; j++)
                 {
                     if (map[i][j] == null) map[i][j] = new Wall();
                 }
@@ -132,7 +130,7 @@ namespace Roguelike
                         }
                         break;
                     case 2: // Юг
-                        if (i + 2 < n - 1)
+                        if (i + 2 < height - 1)
                         {
                             if (map[i + 2][j] == null)
                             {
@@ -142,7 +140,7 @@ namespace Roguelike
                         }
                         break;
                     case 3: // Восток
-                        if (j + 2 < m - 1)
+                        if (j + 2 < width - 1)
                         {
                             if (map[i][j + 2] == null)
                             {
@@ -151,42 +149,6 @@ namespace Roguelike
                             }
                         }
                         break;
-                }
-            }
-        }
-
-        internal bool IsItFinish(Player player) 
-        {
-            if (player != null)
-            {
-                if(player.position == finish_position)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public bool IsItEmpty(Position newPosition) // нет применения
-        {
-            if (newPosition.x >= n || newPosition.y >= m) return false;
-            if (map[newPosition.x][newPosition.y] == null) return false;
-            if (Empty.GetSymSt() == map[newPosition.x][newPosition.y].GetSym())
-            {
-                return true;
-            }
-            return false;
-        }
-        private void ClearMap() // нет применения
-        {
-            for (int i = 1; i < n; i++)
-            {
-                for (int j = 1; j < m; j++)
-                {
-                    if (map[i][j] == null)
-                        map[i][j] = new Empty();
-                    else if (map[i][j].tag != typeof(Wall).Name && map[i][j].tag != typeof(Empty).Name)
-                        map[i][j] = new Empty();
                 }
             }
         }

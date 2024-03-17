@@ -30,7 +30,7 @@ namespace Roguelike
 
         public static void NewGame()
         {
-            _map.Create();
+            _map.randomCreateMap();
             _enemies.Clear();
             _player = new Player(_map.spawn_player);
             _player.Spawn();
@@ -43,10 +43,9 @@ namespace Roguelike
 
         public void Start()
         {
-            _map = new Map();
-            SpawnPlayer();
+            _map = new Map(27,13);
             _enemies = new List<Enemy>();
-            _arrows = new List<Arrow>();
+            //_arrows = new List<Arrow>();
             _monitor = new Monitor();
             _enemy_fabric = new EnemyFabric();
             _player = new Player(_map.spawn_player);
@@ -67,6 +66,19 @@ namespace Roguelike
             }
 
         }
+        public void Update()
+        {
+
+            Monitoring();
+            if (_timer % _move_speed_enemy == 0)
+                ConductEnemies();
+            if (_timer % _move_speed_player == 0)
+                ConductPlayer();
+            if (_timer % _move_speed_arrow == 0)
+                MoveArrows();
+            Thread.Sleep(1);
+            _timer++;
+        }
 
         internal static bool IsEnemy(Position position)
         {
@@ -84,20 +96,6 @@ namespace Roguelike
                 _player = new Player(_map.spawn_player);
             else
                 _player.Spawn();
-        }
-
-        public void Update()
-        {
-
-            Monitoring();
-            if (_timer % _move_speed_enemy == 0)
-                ConductEnemies();
-            if (_timer % _move_speed_player == 0)
-                ConductPlayer();
-            if (_timer % _move_speed_arrow == 0)
-                MoveArrows();
-            Thread.Sleep(1);
-            _timer++;
         }
 
         private void ConductPlayer()

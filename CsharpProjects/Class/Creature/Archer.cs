@@ -10,7 +10,7 @@ namespace Roguelike
     {
         public Archer(Position spawn_position):base(spawn_position)
         {
-            sym = 'A';
+            symbol = 'A';
             weapon = new Bow();
             distance_view = 5;
         }

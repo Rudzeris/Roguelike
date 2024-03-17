@@ -8,10 +8,9 @@ namespace Roguelike
 {
     internal abstract class Enemy : Person
     {
-        public Enemy(Position spawn_position) : base(spawn_position)
+        public Enemy(Position spawn_position,char symbol) : base(spawn_position,symbol)
         {
-            sym = 'X';
-            tag = "Enemy";
+            symbol = 'X';
             maxHP = 1;
             hp = maxHP;
             weapon = null;
@@ -26,30 +25,12 @@ namespace Roguelike
             Game._enemies.Add(this);
             base.Spawn();
         }
-        /*override internal void Conduct()
-        {
-            // Сперва проверим 4 стороны, если там игрок - ударить его
-            // иначе сходить в рандомное место
-
-            // Hit
-            foreach (var move in ControllerEnemy._move)
-            {
-                if (position + move == Game._player.position)
-                {
-                    Hit(Game._player);
-                }
-            }
-
-            Position new_position = ControllerEnemy.Conduct(position);
-            if(Game.is_it_empty(new_position))
-                position=new_position;
-        }*/
 
         internal void Conduct(Position array)
         {
             if(Game._player != null)
                 if (array + position == Game._player.position)
-                    Hit(Game._player);
+                    Attack(Game._player);
             if (!Game.IsItEmpty(position + array))
                 return;
             int x = -1;

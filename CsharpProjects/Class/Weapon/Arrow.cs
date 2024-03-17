@@ -1,4 +1,4 @@
-﻿using Roguelike.Class;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Roguelike
         {
             this.spawn_position = spawn_position;
             this.direction = direction;
-            sym = '*';
+            symbol = '*';
             //f = true;
             position = spawn_position + direction;
             this.friend_arrow = friend_arrow;
