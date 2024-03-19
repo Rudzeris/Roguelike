@@ -9,10 +9,10 @@ namespace Roguelike
     public class Game
     {
         static public Random _rand = new Random();
-        public List<Enemy> _enemies { set; get; }
+        public List<Person> _enemies { set; get; }
         //public List<Arrow> _arrows { set; get; }
         public Player _player { set; get; }
-        public Monitor _monitor { set; get; }
+        public DrawToConsole _drawToConsole { set; get; }
         public uint _count_enemy_on_the_map;
         public Map _map { set; get; }
         public EnemyFabric _enemy_fabric { set; get; }
@@ -25,11 +25,11 @@ namespace Roguelike
         public Game()
         {
             _map = new Map(27, 13);
-            _enemies = new List<Enemy>();
-            //_arrows = new List<Arrow>();
-            _monitor = new Monitor();
-            _enemy_fabric = new EnemyFabric();
+            _enemies = new List<Person>();
             _player = new Player(_map.spawn_player);
+            //_arrows = new List<Arrow>();
+            _drawToConsole = new DrawToConsole(this,_map.map,_player,_enemies);
+            _enemy_fabric = new EnemyFabric();
 
             Start();
         }
@@ -56,7 +56,7 @@ namespace Roguelike
 
         public void Update()
         {
-            Monitoring();
+            _drawToConsole.update();
             //if (_timer % _move_speed_enemy == 0)
             //    ConductEnemies();
             //if (_timer % _move_speed_player == 0)
@@ -114,10 +114,6 @@ namespace Roguelike
                 }
             }
         }*/
-        private void Monitoring()
-        {
-            _monitor.Monitoring(_map.map, 10, _player, _enemies.ToList<Person>());
-        }
 
         //static public bool IsItEmpty(Vector2 new_position, bool search_person = true)
         //{

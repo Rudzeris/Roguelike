@@ -7,34 +7,54 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    public class Monitor
+    public class DrawToConsole
     {
-        uint flash_per_second = 1;
-        uint count_update = 0;
-        bool draw_persons = true;
+        private uint _countUpdate = 0;
+        private uint _timer = 0;
 
-        public void Monitoring(List<List<GameObject>> _map,uint speed=10,
-            Person? _player = null,
-            List<Person>? _enemies = null,
-            List<GameObject> _arrows = null)
+        private readonly Game _game;
+        private readonly List<List<GameObject>> _map;
+        private readonly Person _player;
+        private readonly List<Person> _enemies;
+        //private readonly List<GameObject> _arrows;
+
+        public DrawToConsole(Game _game,List<List<GameObject>> _map,
+            Person _player,
+            List<Person> _enemies
+            //List<GameObject> _arrows,
+            )
         {
-            DrawMap(_map, _player, _enemies,_arrows);
+            this._game= _game;
+            this._map = _map;
+            this._player = _player;
+            this._enemies = _enemies;
+            //this._arrows = _arrows;
+            _countUpdate = 10;
+        }
+
+        public void update()
+        {
+            if (_timer % _countUpdate == 0)
+            {
+                Console.Clear();
+                DrawTimer();
+                DrawInformation();
+                DrawMap();
+            }
+
+            _timer++;
         }
 
         public void DrawTimer()
         {
-            //Console.WriteLine($"Timer: {Game._timer}");
+            Console.WriteLine(_game._timer);
         }
 
-        public void DrawInformation(Person person)
+        public void DrawInformation()
         {
-            if(person!=null)
-                Console.WriteLine($"Hit Point: {person.hp}");
+            Console.WriteLine($"Hit Point: {_player.hp}");
         }
-        public void DrawMap(List<List<GameObject>> _map,
-            Person? _player = null,
-            List<Person>? _enemies = null,
-            List<GameObject> _arrows = null)
+        public void DrawMap()
         {
             if (_map == null) return;
             // copy map
@@ -48,8 +68,6 @@ namespace Roguelike
                 }
                 map.Add(temp);
             }
-            if (draw_persons||count_update%(60/(flash_per_second+1)) != 0)
-            {
                 if (_enemies != null)
                 {
                     foreach (var enemy in _enemies)
@@ -62,18 +80,13 @@ namespace Roguelike
                     map[_player.position.x][_player.position.y] = _player;
                 }
 
-                if (_arrows != null)
+                /*if (_arrows != null)
                 {
                     foreach (var arrow in _arrows)
                     {
                         map[arrow.position.x][arrow.position.y] = arrow;
                     }
-                }
-            }
-            count_update=(count_update+1)%50;
-            Console.Clear();
-            DrawTimer();
-            DrawInformation(_player);
+                }*/
             for (int i = 0; i < map.Count; i++)
             {
                 for (int j = 0; j < map[i].Count; j++)
