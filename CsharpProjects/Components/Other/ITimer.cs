@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    public interface IMapReader
+    public interface ITimer
     {
-        int Height();
-        int Width();
-        List<List<GameObject>> getMap();
-        char at(int x, int y);
+        int getTimer();
     }
 }

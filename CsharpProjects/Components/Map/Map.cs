@@ -1,5 +1,4 @@
 ﻿using Roguelike;
-using Roguelike.Components.Map;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -28,13 +27,13 @@ namespace Roguelike
         public void randomCreateMap() // a a
         {
             spawn_player = new Vector2(
-                1 + 2 * Random4ik.getRandomNumber(0, (_height - 2) / 2),
-                1 + 2 * Random4ik.getRandomNumber(0, (_width - 2) / 2)
+                1 + 2 * Random4ik.getRandomNumber(0, (_width - 2) / 2),
+                1 + 2 * Random4ik.getRandomNumber(0, (_height - 2) / 2)
                 );
 
             finish_position = new Vector2(
-                1 + ((_height - 2) - spawn_player.x),
-                1 + ((_width - 2) - spawn_player.y)
+                1 + ((_width - 2) - spawn_player.x),
+                1 + ((_height - 2) - spawn_player.y)
                 );
 
             spawn_enemies.Clear();
@@ -43,10 +42,10 @@ namespace Roguelike
             {
                 for (int j = 1; j < _width - 1; j += 4)
                 {
-                    if (Math.Pow(spawn_player.x - i, 2) +
-                        Math.Pow(spawn_player.y - j, 2) > radius)
+                    if (Math.Pow(spawn_player.y - i, 2) +
+                        Math.Pow(spawn_player.x - j, 2) > radius)
                     {
-                        spawn_enemies.Add(new Vector2(i, j));
+                        spawn_enemies.Add(new Vector2(j, i));
                     }
                 }
             }
@@ -89,8 +88,8 @@ namespace Roguelike
                     if (_map[i][j] == null) _map[i][j] = new Wall(new Vector2(i, j));
                 }
             }
-            _map[finish_position.x][finish_position.y] = new Finish(
-                new Vector2(finish_position.x, finish_position.y)
+            _map[finish_position.y][finish_position.x] = new Finish(
+                new Vector2(finish_position.y, finish_position.x)
                 );
         }
 
@@ -165,6 +164,11 @@ namespace Roguelike
         public List<List<GameObject>> getMap()
         {
             return _map;
+        }
+
+        public char at(int y, int x)
+        {
+            return _map[y][x].symbol;
         }
     }
 }

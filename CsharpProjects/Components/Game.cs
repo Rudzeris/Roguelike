@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 
 namespace Roguelike
 {
-    public class Game
+    public class Game : ITimer
     {
         public List<Person> _enemies { set; get; }
         //public List<Arrow> _arrows { set; get; }
         public Player _player { set; get; }
-        public DrawToConsole _drawToConsole { set; get; }
+        public Renderer _drawToConsole { set; get; }
         public uint _count_enemy_on_the_map;
         public Map _map { set; get; }
         public EnemyFabric _enemy_fabric { set; get; }
-        public uint FPS { get; private set; }
-        public uint _timer { get; private set; }
-        public uint _move_speed_enemy { get; private set; }
-        public uint _move_speed_player { get; private set; }
-        public uint _move_speed_arrow { get; private set; }
+        public int FPS { get; private set; }
+        public int _timer { get; private set; }
+        public int _move_speed_enemy { get; private set; }
+        public int _move_speed_player { get; private set; }
+        public int _move_speed_arrow { get; private set; }
 
+        public int getTimer() { return _timer; }
         public Game()
         {
             _map = new Map(27, 13);
             _enemies = new List<Person>();
             _player = new Player(_map.spawn_player);
             //_arrows = new List<Arrow>();
-            _drawToConsole = new DrawToConsole(this,_map._map,_player,_enemies);
+            _drawToConsole = new Renderer(this,_map,_enemies,_player);
             _enemy_fabric = new EnemyFabric();
 
             Start();
