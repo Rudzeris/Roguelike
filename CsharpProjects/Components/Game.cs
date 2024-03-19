@@ -21,17 +21,25 @@ namespace Roguelike
         public int _move_speed_enemy { get; private set; }
         public int _move_speed_player { get; private set; }
         public int _move_speed_arrow { get; private set; }
-
+        public InputManager _inputManager { get; private set; }
+        public InputHandler _inputHandler { get; private set; }
+        public Collision _collusion { get; private set; }
         public int getTimer() { return _timer; }
         public Game()
         {
+            _collusion = new Collision();
+            _inputManager = new InputManager();
             _map = new Map(27, 13);
             _enemies = new List<Person>();
-            _player = new Player(_map.spawn_player);
+            _player = new Player(_collusion, _map.spawn_player);
             //_arrows = new List<Arrow>();
             _drawToConsole = new Renderer(this,_map,_enemies,_player);
             _enemy_fabric = new EnemyFabric();
-
+            _inputHandler = new InputHandler(_player,_inputManager);
+            _collusion.setMapReader(_map)
+                    .setPlayer(_player)
+                    .setEnemies(_enemies);
+            _map.setCollision(_collusion);
             Start();
         }
 
@@ -58,12 +66,7 @@ namespace Roguelike
         public void Update()
         {
             _drawToConsole.update();
-            //if (_timer % _move_speed_enemy == 0)
-            //    ConductEnemies();
-            //if (_timer % _move_speed_player == 0)
-            //    ConductPlayer();
-            //if (_timer % _move_speed_arrow == 0)
-            //    MoveArrows();
+            _inputManager.ReadInput();
             Thread.Sleep(1);
             _timer++;
         }

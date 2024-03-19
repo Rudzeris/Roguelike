@@ -2,6 +2,6 @@
 {
     public class Finish:Area
     {
-        public Finish(Vector2 position):base(position,'$',true){ }
+        public Finish(ICollision? _ICollision, Vector2 position) : base(_ICollision, position, '$', true) { }
     }
 }

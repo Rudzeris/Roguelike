@@ -4,6 +4,7 @@ namespace Roguelike
 {
     public class InputManager
     {
+        public Action<KeyMode>? OnAction;
         public InputManager() { }
         public KeyMode ReadInput()
         {
@@ -13,15 +14,20 @@ namespace Roguelike
                 switch (key)
                 {
                     case ConsoleKey.W:
-                        return (KeyMode.Up);
+                        OnAction?.Invoke(KeyMode.Up);
+                        break;
                     case ConsoleKey.A:
-                        return (KeyMode.Left);
+                        OnAction?.Invoke(KeyMode.Left);
+                        break;
                     case ConsoleKey.S:
-                        return (KeyMode.Down);
+                        OnAction?.Invoke(KeyMode.Down);
+                        break;
                     case ConsoleKey.D:
-                        return (KeyMode.Right);
+                        OnAction?.Invoke(KeyMode.Right);
+                        break;
                     case ConsoleKey.Spacebar:
-                        return (KeyMode.Attack);
+                        OnAction?.Invoke(KeyMode.Attack);
+                        break;
                 }
             }
             return KeyMode.None;

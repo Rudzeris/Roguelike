@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    public interface IMapReader
+    public interface ICollision
     {
-        int getHeight();
-        int getWidth();
-        bool isItEmpty(int x, int y);
-        char at(int x, int y);
+        bool isItEmpty(Vector2 position);
     }
 }

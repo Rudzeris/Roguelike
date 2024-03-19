@@ -1,9 +1,10 @@
 ﻿namespace Roguelike
 {
-    static public class ControllerPlayer
+    public class ControllerPlayer
     {
-        static public void Conduct(Player player)
+        public ControllerPlayer()
         {
+
         }
     }
     

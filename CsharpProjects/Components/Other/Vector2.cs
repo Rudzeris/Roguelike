@@ -28,6 +28,14 @@ namespace Roguelike
             this.x=temp.x;
             this.y=temp.y;
         }
+        public static bool operator <(Vector2 pos1, Vector2 pos2)
+        {
+            return pos1.x < pos2.x && pos1.y < pos2.y;
+        }
+        public static bool operator >(Vector2 pos1, Vector2 pos2)
+        {
+            return !(pos1 < pos2);
+        }
         public static bool operator !=(Vector2 pos1, Vector2 pos2)
         {
             return !(pos1 == pos2);

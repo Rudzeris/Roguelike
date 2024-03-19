@@ -31,8 +31,8 @@ namespace Roguelike
             this._Imap = _Imap;
             this._enemies = _enemies;
             _countUpdate = 10;
-            _height = _Imap.Height();
-            _width  = _Imap.Width();
+            _height = _Imap.getHeight();
+            _width  = _Imap.getWidth();
             _map = new char[_height, _width];
             
         }
@@ -80,6 +80,7 @@ namespace Roguelike
                     _map[i,j] = _Imap.at(i, j);
                 }
             }
+            if (_player.position < new Vector2(_width,_height))
             _map[_player.position.y, _player.position.x] = _player.symbol;
             if(_enemies.Count > 0)
                 foreach (var q in _enemies)

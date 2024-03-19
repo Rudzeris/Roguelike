@@ -2,6 +2,6 @@
 {
     public class Empty : Area
     {
-        public Empty(Vector2 position) : base(position,' ',true) { }
+        public Empty(ICollision? _ICollision, Vector2 position) : base(_ICollision, position, ' ', true) { }
     }
 }

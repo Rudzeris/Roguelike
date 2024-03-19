@@ -3,7 +3,7 @@ namespace Roguelike
 {
     public class Player : Person
     {
-        public Player(Vector2 position) : base(position, 'P')
+        public Player(ICollision _ICollision, Vector2 position) : base(_ICollision, position, 'P')
         {
             //weapon = null;
             defense = 0;
