@@ -23,10 +23,10 @@ namespace Roguelike
 
         public void Attack(Person person)
         {
-            person?.Damage(damage);
+            person?.TakeDamage(damage);
         }
 
-        private void Damage(int damage)
+        private void TakeDamage(int damage)
         {
             damage = (defense-damage);
             hp -= damage < 0 ? 0 : damage;
@@ -35,7 +35,7 @@ namespace Roguelike
             
         }
 
-        public void Move(Direction direction)
+        public void Move(KeyMode direction)
         {
             Vector2[] vectorDir = new Vector2[4]{
                 new Vector2(0,-1), new Vector2(-1,0), // Up, Left

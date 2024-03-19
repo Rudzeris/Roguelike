@@ -2,13 +2,6 @@
 {
     static public class ControllerEnemy
     {
-        static public Vector2[] _move { get; private set; } = {
-            new Vector2(-1, 0), // up
-            new Vector2(0, -1), // left
-            new Vector2(1, 0), // down
-            new Vector2(0, 1) // right
-        };
-
         /*static public uint TracerPlayer(Vector2 position, Vector2 old_position, uint length = 0)
         {
             if (Game._player == null)

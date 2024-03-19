@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    public enum Direction { Up = 0, Left = 1, Down = 2, Right = 3 };
+    public enum KeyMode { Up = 0, Left, Down, Right, Attack, Start, None};
 
 }

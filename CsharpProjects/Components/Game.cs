@@ -8,7 +8,6 @@ namespace Roguelike
 {
     public class Game
     {
-        static public Random _rand = new Random();
         public List<Person> _enemies { set; get; }
         //public List<Arrow> _arrows { set; get; }
         public Player _player { set; get; }
@@ -28,7 +27,7 @@ namespace Roguelike
             _enemies = new List<Person>();
             _player = new Player(_map.spawn_player);
             //_arrows = new List<Arrow>();
-            _drawToConsole = new DrawToConsole(this,_map.map,_player,_enemies);
+            _drawToConsole = new DrawToConsole(this,_map._map,_player,_enemies);
             _enemy_fabric = new EnemyFabric();
 
             Start();
