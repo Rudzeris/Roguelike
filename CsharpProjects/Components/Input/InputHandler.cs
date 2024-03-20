@@ -9,13 +9,13 @@ namespace Roguelike
     public class InputHandler
     {
         public InputManager _input{get; private set;}
-        public Player _player { get; private set;}
+        public ControllerPlayer _controllerPlayer { get; private set;}
         
-        public InputHandler(Player player, InputManager input)
+        public InputHandler(ControllerPlayer _controllerPlayer, InputManager input)
         {
-            _player = player;
+            _controllerPlayer = _controllerPlayer;
             _input = input;
-            _input.OnAction += player.Action;
+            _input.OnAction += _controllerPlayer.Action;
         }
     }
 }

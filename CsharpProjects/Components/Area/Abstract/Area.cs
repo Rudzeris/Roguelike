@@ -2,7 +2,7 @@
 {
     public abstract class Area:GameObject
     {
-        public Area(ICollision? _ICollision, Vector2 position, char symbol, bool passage):
-            base(_ICollision,position,symbol,passage) { }
+        public Area(Vector2 position, char symbol, bool passage):
+            base(position,symbol,passage) { }
     }
 }

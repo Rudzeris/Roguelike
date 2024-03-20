@@ -70,14 +70,14 @@ namespace Roguelike
             // Создаем стены по краям
             for (int i = 1; i < _height - 1; i++)
             {
-                _map[i][0] = new Wall(_ICollision, new Vector2(i, 0));
-                _map[i][_width - 1] = new Wall(_ICollision, new Vector2(i, _width - 1));
+                _map[i][0] = new Wall(new Vector2(i, 0));
+                _map[i][_width - 1] = new Wall(new Vector2(i, _width - 1));
 
             }
             for (int i = 0; i < _width; i++)
             {
-                _map[0][i] = new Wall(_ICollision, new Vector2(0, i));
-                _map[_height - 1][i] = new Wall(_ICollision, new Vector2(_height - 1, i));
+                _map[0][i] = new Wall(new Vector2(0, i));
+                _map[_height - 1][i] = new Wall(new Vector2(_height - 1, i));
             }
 
             // Создаем дороги с помощью рекурсивной функции
@@ -91,10 +91,10 @@ namespace Roguelike
             {
                 for (int j = 0; j < _width; j++)
                 {
-                    if (_map[i][j] == null) _map[i][j] = new Wall(_ICollision, new Vector2(i, j));
+                    if (_map[i][j] == null) _map[i][j] = new Wall(new Vector2(i, j));
                 }
             }
-            _map[finish_position.y][finish_position.x] = new Finish(_ICollision,
+            _map[finish_position.y][finish_position.x] = new Finish(
                 new Vector2(finish_position.y, finish_position.x)
                 );
         }
@@ -102,7 +102,7 @@ namespace Roguelike
         private void CreateRoad(int i, int j)
         {
             // Надо послать во все 4 стороны))
-            _map[i][j] = new Empty(_ICollision, new Vector2(i, j));
+            _map[i][j] = new Empty(new Vector2(i, j));
 
             bool[] bl = { true, true, true, true };
             int sl;
@@ -130,7 +130,7 @@ namespace Roguelike
                     {
                         _map[i + Vector2.V2Direction[sl].y]
                         [j + Vector2.V2Direction[sl].x]
-                        = new Empty(_ICollision,
+                        = new Empty(
                             new Vector2(
                                 i + Vector2.V2Direction[sl].y,
                                 j + Vector2.V2Direction[sl].x

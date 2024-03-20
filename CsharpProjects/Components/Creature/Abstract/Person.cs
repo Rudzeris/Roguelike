@@ -9,8 +9,8 @@ namespace Roguelike
         public int defense { get; protected set; }
         //public Bow ?weapon { get; protected set; }
 
-        protected Person(ICollision _ICollision, Vector2 position,char symbol):
-            base(_ICollision, position,symbol,false)
+        protected Person(Vector2 position,char symbol):
+            base(position,symbol,false)
         {
         }
         public void Spawn()
@@ -22,7 +22,7 @@ namespace Roguelike
 
         }
 
-        public void Attack(Person person)
+        public void Attack(Person? person)
         {
             person?.TakeDamage(damage);
         }
@@ -34,23 +34,6 @@ namespace Roguelike
             if (hp <= 0)
                 Dead();
             
-        }
-
-        public void Action(KeyMode mode)
-        {
-            switch (mode)
-            {
-                case KeyMode.Up:
-                case KeyMode.Down:
-                case KeyMode.Left:
-                case KeyMode.Right:
-                    Move(mode); 
-                    break;
-                case KeyMode.Attack:
-                    break;
-                default:
-                    break;
-            }
         }
 
         public void Move(KeyMode direction)

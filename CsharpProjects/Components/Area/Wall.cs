@@ -2,6 +2,6 @@
 {
     public class Wall : Area
     {
-        public Wall(ICollision? _ICollision, Vector2 position) : base(_ICollision,position, '#', false) { }
+        public Wall(Vector2 position) : base(position, '#', false) { }
     }
 }

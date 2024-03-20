@@ -23,6 +23,7 @@ namespace Roguelike
         public int _move_speed_arrow { get; private set; }
         public InputManager _inputManager { get; private set; }
         public InputHandler _inputHandler { get; private set; }
+        public ControllerPlayer _controllerPlayer { get; private set; }
         public Collision _collusion { get; private set; }
         public int getTimer() { return _timer; }
         public Game()
@@ -31,11 +32,12 @@ namespace Roguelike
             _inputManager = new InputManager();
             _map = new Map(27, 13);
             _enemies = new List<Person>();
-            _player = new Player(_collusion, _map.spawn_player);
+            _player = new Player(_map.spawn_player);
+            _controllerPlayer = new ControllerPlayer(_player,_collusion);
             //_arrows = new List<Arrow>();
             _drawToConsole = new Renderer(this,_map,_enemies,_player);
             _enemy_fabric = new EnemyFabric();
-            _inputHandler = new InputHandler(_player,_inputManager);
+            _inputHandler = new InputHandler(_controllerPlayer,_inputManager);
             _collusion.setMapReader(_map)
                     .setPlayer(_player)
                     .setEnemies(_enemies);

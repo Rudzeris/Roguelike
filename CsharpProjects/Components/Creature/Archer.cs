@@ -3,7 +3,7 @@ namespace Roguelike
 {
     public class Archer : Enemy
     {
-        public Archer(ICollision _ICollision, Vector2 position) : base(_ICollision, position, 'A')
+        public Archer(Vector2 position) : base(position, 'A')
         {
             //weapon = new Bow();
             distance_view = 5;

@@ -48,7 +48,7 @@ namespace Roguelike
             if (_enemies?.Count > 0)
                 foreach (GameObject q in _enemies)
                     if (position == q.position) _empty = false;
-            if(_mapReader.isItEmpty(position.x, position.y)) _empty = false;
+            if(!_mapReader.isItEmpty(position.x, position.y)) _empty = false;
             if(_player.position == position) _empty = false;
             return _empty;
         }

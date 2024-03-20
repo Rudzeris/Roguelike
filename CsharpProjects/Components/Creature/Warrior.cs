@@ -3,7 +3,7 @@ namespace Roguelike
 {
     public class Warrior:Enemy
     {
-        public Warrior(ICollision _ICollision, Vector2 position) : base(_ICollision, position, 'W')
+        public Warrior(Vector2 position) : base(position, 'W')
         {
             //weapon = null;
             distance_view = 5;
