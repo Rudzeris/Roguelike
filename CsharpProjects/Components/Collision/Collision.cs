@@ -46,11 +46,22 @@ namespace Roguelike
             bool _empty = true;
             if (_enemies == null || _mapReader == null || _player == null) return false;
             if (_enemies?.Count > 0)
-                foreach (GameObject q in _enemies)
+                foreach (Person q in _enemies)
                     if (position == q.position) _empty = false;
             if(!_mapReader.isItEmpty(position.x, position.y)) _empty = false;
             if(_player.position == position) _empty = false;
             return _empty;
+        }
+
+        public Person? getPerson(Vector2 position)
+        {
+            Person? person = null;
+            if (_enemies?.Count > 0)
+                foreach (Person q in _enemies)
+                    if (position == q.position) person = q;
+            if(_player!=null)
+            if (_player.position == position) person = _player;
+            return person;
         }
     }
 }

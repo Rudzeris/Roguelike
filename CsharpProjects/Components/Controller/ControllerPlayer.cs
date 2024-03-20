@@ -32,8 +32,18 @@ namespace Roguelike
                         _player.Move(KeyMode.Right);
                     break;
                 case KeyMode.Attack:
-                    Person person = null;
-                    _player.Attack(person);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Person? person = (
+                            _collision.getPerson(_player.position + Vector2.Up) ??
+                            _collision.getPerson(_player.position + Vector2.Left) ??
+                            _collision.getPerson(_player.position + Vector2.Down) ??
+                            _collision.getPerson(_player.position + Vector2.Right) ??
+                            null
+                            );
+                        _player.Attack(person);
+                    }
+
                     break;
             }
         }

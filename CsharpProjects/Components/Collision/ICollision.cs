@@ -9,5 +9,6 @@ namespace Roguelike
     public interface ICollision
     {
         bool isItEmpty(Vector2 position);
+        Person? getPerson(Vector2 position);
     }
 }
