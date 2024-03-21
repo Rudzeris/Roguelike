@@ -8,6 +8,8 @@ namespace Roguelike
 {
     public interface IMapReader
     {
+        Vector2 getSpawnPlayer();
+        List<Vector2> getSpawnEnemies();
         int getHeight();
         int getWidth();
         bool isItEmpty(int x, int y);

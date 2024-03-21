@@ -187,5 +187,15 @@ namespace Roguelike
         {
             return _map[y][x].GetType() == typeof(Finish);
         }
+
+        public Vector2 getSpawnPlayer()
+        {
+            return spawn_player;
+        }
+
+        public List<Vector2> getSpawnEnemies()
+        {
+            return spawn_enemies;
+        }
     }
 }

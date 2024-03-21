@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
@@ -26,6 +27,7 @@ namespace Roguelike
         private bool _pause;
         public Game()
         {
+            FPS = 10;
             _collusion = new Collision();
             _inputManager = new InputManager(this,this);
             _map = new Map();
@@ -33,9 +35,9 @@ namespace Roguelike
             _player = new Player(_map.spawn_player);
             _controllerPlayer = new ControllerPlayer(_player, _collusion, this);
             //_arrows = new List<Arrow>();
-            _drawToConsole = new Renderer(this, _map, _enemies, _player);
+            _drawToConsole = new Renderer(this, _map, _enemies, _player, FPS);
             _inputHandler = new InputHandler(_controllerPlayer, _inputManager);
-            _enemy_fabric = new EnemyFabric();
+            _enemy_fabric = new EnemyFabric(_map,addEnemy);
             _collusion.setMapReader(_map)
                     .setPlayer(_player)
                     .setEnemies(_enemies);
@@ -84,6 +86,12 @@ namespace Roguelike
         public bool paused()
         {
             return _pause;
+        }
+
+        public void addEnemy(Person? enemy)
+        {
+            if(enemy != null)
+            _enemies.Add(enemy);
         }
 
         //public static bool IsEnemy(Vector2 position)

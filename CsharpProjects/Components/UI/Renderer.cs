@@ -9,7 +9,7 @@ namespace Roguelike
 {
     public class Renderer
     {
-        private uint _countUpdate = 0;
+        private int _countUpdate = 0;
         private uint _timer = 0;
 
         private readonly ITimer _Itimer;
@@ -24,13 +24,13 @@ namespace Roguelike
 
         public Renderer(ITimer _Itimer, IMapReader _Imap,
             List<Person> _enemies, Player _player
-            )
+            ,int _fps)
         {
             this._player = _player;
             this._Itimer = _Itimer;
             this._Imap = _Imap;
             this._enemies = _enemies;
-            _countUpdate = 10;
+            _countUpdate = (60/_fps);
             _height = _Imap.getHeight();
             _width  = _Imap.getWidth();
             _map = new char[_height, _width];
