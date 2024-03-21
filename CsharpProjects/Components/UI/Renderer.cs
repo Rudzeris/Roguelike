@@ -73,6 +73,12 @@ namespace Roguelike
         }
         private void updateMap()
         {
+            if(_height != _Imap.getHeight() || _width != _Imap.getWidth())
+            {
+                _height = _Imap.getHeight();
+                _width = _Imap.getWidth();
+                _map = new char[_height, _width];
+            }
             for (int i = 0; i < _height; i++)
             {
                 for (int j = 0; j < _width; j++)

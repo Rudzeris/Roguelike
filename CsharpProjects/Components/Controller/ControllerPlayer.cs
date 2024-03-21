@@ -5,14 +5,17 @@ namespace Roguelike
     public class ControllerPlayer
     {
         ICollision _collision;
+        IPause _pause;
         Person _player;
-        public ControllerPlayer(Person _player, ICollision _collision)
+        public ControllerPlayer(Person _player, ICollision _collision, IPause _pause)
         {
+            this._pause = _pause;
             this._player = _player;
             this._collision = _collision;
         }
         public void Action(KeyMode key)
         {
+            if (_pause.paused()) return;
             switch (key)
             {
                 case KeyMode.Up:
@@ -46,6 +49,9 @@ namespace Roguelike
 
                     break;
             }
+            if (_collision.isItFinish(_player.position))
+                _pause.pause();
+
         }
     }
 

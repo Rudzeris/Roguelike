@@ -11,6 +11,9 @@ namespace Roguelike
         int getHeight();
         int getWidth();
         bool isItEmpty(int x, int y);
+        bool isItEmpty(Vector2 position) { return isItEmpty(position.x, position.y); }
+        bool isItFinish(int x, int y);
+        bool isItFinish(Vector2 position) { return isItFinish(position.x, position.y); }
         char at(int x, int y);
     }
 }

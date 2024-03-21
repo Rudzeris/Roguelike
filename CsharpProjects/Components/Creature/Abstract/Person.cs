@@ -13,10 +13,6 @@ namespace Roguelike
             base(position,symbol,false)
         {
         }
-        public void Spawn()
-        {
-
-        }
         public void Dead()
         {
 

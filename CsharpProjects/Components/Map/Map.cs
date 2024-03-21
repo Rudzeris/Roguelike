@@ -7,7 +7,6 @@ namespace Roguelike
 {
     public class Map : IMapSet, IMapReader
     {
-        private ICollision? _ICollision;
         public List<List<GameObject>> _map;
         public Vector2 spawn_player { get; private set; }
         public Vector2 finish_position { get; private set; }
@@ -16,12 +15,13 @@ namespace Roguelike
         public int _height { get; private set; }
         public int _width { get; private set; }
 
-        public void setCollision(ICollision collision)
+        public Map()
         {
-            this._ICollision = collision;
+            _height = 0; _width = 0;
+            _map = new List<List<GameObject>>();
+            spawn_enemies = new List<Vector2>();
         }
-
-        public Map(int width, int height)
+        public Map(int height, int width)
         {
             _map = new List<List<GameObject>>();
             spawn_enemies = new List<Vector2>();
@@ -32,15 +32,19 @@ namespace Roguelike
 
         public void randomCreateMap() // a a
         {
+            if (_height == 0 || _width == 0) {
+                Console.WriteLine("don't create Map");
+                return; 
+            }
             spawn_player = new Vector2(
                 1 + 2 * Random4ik.getRandomNumber(0, (_width - 2) / 2),
                 1 + 2 * Random4ik.getRandomNumber(0, (_height - 2) / 2)
                 );
 
             finish_position = new Vector2(
-                1 + ((_width - 2) - spawn_player.x),
-                1 + ((_height - 2) - spawn_player.y)
-                );
+                Random4ik.getRandomNumber(2) == 0 ? 1 : _width - 2,
+                Random4ik.getRandomNumber(2) == 0 ? 1 : _height - 2
+                ) ;
 
             spawn_enemies.Clear();
             int radius = 4;
@@ -148,6 +152,8 @@ namespace Roguelike
         {
             this._height = height;
             this._width = width;
+            _map.Clear();
+            spawn_enemies.Clear();
             randomCreateMap();
         }
 
@@ -175,6 +181,11 @@ namespace Roguelike
         public bool isItEmpty(int x, int y)
         {
             return _map[y][x].passable;
+        }
+
+        public bool isItFinish(int x, int y)
+        {
+            return _map[y][x].GetType() == typeof(Finish);
         }
     }
 }

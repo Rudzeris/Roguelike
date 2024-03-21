@@ -9,6 +9,6 @@ namespace Roguelike
             damage = 1;
             maxHP = hp = 4;
         }
-
+        public void spawn(Vector2 position) { this.position = position; hp = maxHP; }
     }
 }

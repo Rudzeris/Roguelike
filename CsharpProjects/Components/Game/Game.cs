@@ -7,10 +7,9 @@ using System.Threading;
 
 namespace Roguelike
 {
-    public class Game : ITimer
+    public class Game : ITimer, IRestart, IPause
     {
         public List<Person> _enemies { set; get; }
-        //public List<Arrow> _arrows { set; get; }
         public Player _player { set; get; }
         public Renderer _drawToConsole { set; get; }
         public uint _count_enemy_on_the_map;
@@ -18,59 +17,73 @@ namespace Roguelike
         public EnemyFabric _enemy_fabric { set; get; }
         public int FPS { get; private set; }
         public int _timer { get; private set; }
-        public int _move_speed_enemy { get; private set; }
-        public int _move_speed_player { get; private set; }
-        public int _move_speed_arrow { get; private set; }
         public InputManager _inputManager { get; private set; }
         public InputHandler _inputHandler { get; private set; }
         public ControllerPlayer _controllerPlayer { get; private set; }
         public Collision _collusion { get; private set; }
         public int getTimer() { return _timer; }
+
+        private bool _pause;
         public Game()
         {
             _collusion = new Collision();
-            _inputManager = new InputManager();
-            _map = new Map(27, 13);
+            _inputManager = new InputManager(this,this);
+            _map = new Map();
             _enemies = new List<Person>();
             _player = new Player(_map.spawn_player);
-            _controllerPlayer = new ControllerPlayer(_player,_collusion);
+            _controllerPlayer = new ControllerPlayer(_player, _collusion, this);
             //_arrows = new List<Arrow>();
-            _drawToConsole = new Renderer(this,_map,_enemies,_player);
+            _drawToConsole = new Renderer(this, _map, _enemies, _player);
+            _inputHandler = new InputHandler(_controllerPlayer, _inputManager);
             _enemy_fabric = new EnemyFabric();
-            _inputHandler = new InputHandler(_controllerPlayer,_inputManager);
             _collusion.setMapReader(_map)
                     .setPlayer(_player)
                     .setEnemies(_enemies);
-            _map.setCollision(_collusion);
-            Start();
         }
 
         public void Start()
         {
-            _player.Spawn();
-            FPS = 20;
+            play();
+            _enemies.Clear();
+            _map.recreateMap(1 + Random4ik.getRandomNumber(3, 6) * 2, 1 + Random4ik.getRandomNumber(5,12) * 2);
+            _player.spawn(_map.spawn_player);
             _timer = 0;
-            _move_speed_enemy = 80;
-            _move_speed_player = 10;
-            _move_speed_arrow = 10;
             _count_enemy_on_the_map = 5;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
                 //_enemy_fabric.CreateEmemy(i % 2 == 0);
-            }
-            while (true)
-            {
-                Update();
             }
 
         }
 
         public void Update()
         {
-            _drawToConsole.update();
-            _inputManager.ReadInput();
-            Thread.Sleep(1);
-            _timer++;
+            while (true)
+            {
+                _inputManager.ReadInput();
+                _drawToConsole.update();
+                Thread.Sleep(1);
+                _timer++;
+
+            }
+        }
+
+        public void restart()
+        {
+            Start();
+        }
+
+        public void pause()
+        {
+            _pause = true;
+        }
+        public void play()
+        {
+            _pause = false;
+        }
+        public bool paused()
+        {
+            return _pause;
         }
 
         //public static bool IsEnemy(Vector2 position)

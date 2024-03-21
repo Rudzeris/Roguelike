@@ -18,6 +18,7 @@ namespace Rogalic
         {
             Game game = new Game();
             game.Start();
+            game.Update();
         }
     }
 }

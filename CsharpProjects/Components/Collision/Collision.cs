@@ -63,5 +63,12 @@ namespace Roguelike
             if (_player.position == position) person = _player;
             return person;
         }
+
+        public bool isItFinish(Vector2 position)
+        {
+            if(_mapReader != null)
+                return _mapReader.isItFinish(position);
+            else return false;
+        }
     }
 }

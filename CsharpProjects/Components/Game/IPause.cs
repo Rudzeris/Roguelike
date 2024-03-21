@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    public interface IMapSet
+    public interface IPause
     {
-        void recreateMap(int height, int width);
-        void setObjectToMap(int height, int width, GameObject obj);
+        void pause();
+        void play();
+        bool paused();
     }
 }
