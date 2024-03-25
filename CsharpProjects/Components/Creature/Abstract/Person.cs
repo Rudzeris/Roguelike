@@ -13,12 +13,9 @@ namespace Roguelike
             base(position,symbol,false)
         {
         }
-        public void Dead()
-        {
+        protected abstract void Dead();
 
-        }
-
-        public void Attack(Person? person)
+        public virtual void Attack(Person? person)
         {
             person?.TakeDamage(damage);
         }
@@ -26,13 +23,13 @@ namespace Roguelike
         private void TakeDamage(int damage)
         {
             damage = (defense-damage);
-            hp -= damage < 0 ? 0 : damage;
+            hp += damage > 0 ? 0 : damage;
             if (hp <= 0)
                 Dead();
             
         }
 
-        public void Move(KeyMode direction)
+        public virtual void Move(KeyMode direction)
         {
             position += Vector2.V2Direction[(int)direction];
         }

@@ -37,13 +37,13 @@ namespace Roguelike
                 return; 
             }
             spawn_player = new Vector2(
-                1 + 2 * Random4ik.getRandomNumber(0, (_width - 2) / 2),
-                1 + 2 * Random4ik.getRandomNumber(0, (_height - 2) / 2)
+                1 + 2 * Random4ik.Next(0, (_width - 2) / 2),
+                1 + 2 * Random4ik.Next(0, (_height - 2) / 2)
                 );
 
             finish_position = new Vector2(
-                Random4ik.getRandomNumber(2) == 0 ? 1 : _width - 2,
-                Random4ik.getRandomNumber(2) == 0 ? 1 : _height - 2
+                Random4ik.Next(2) == 0 ? 1 : _width - 2,
+                Random4ik.Next(2) == 0 ? 1 : _height - 2
                 ) ;
 
             spawn_enemies.Clear();
@@ -86,8 +86,8 @@ namespace Roguelike
 
             // Создаем дороги с помощью рекурсивной функции
             CreateRoad(
-                1 + 2 * Random4ik.getRandomNumber(0, (_height - 2) / 2),
-                1 + 2 * Random4ik.getRandomNumber(0, (_width - 2) / 2)
+                1 + 2 * Random4ik.Next(0, (_height - 2) / 2),
+                1 + 2 * Random4ik.Next(0, (_width - 2) / 2)
                 );
 
             // Добавляем стены внутри лабиринта
@@ -116,7 +116,7 @@ namespace Roguelike
             // пойти в 1
             for (int q = 4; q > 0; q--)
             {
-                sl = Random4ik.getRandomNumber(q);
+                sl = Random4ik.Next(q);
                 for (int k = 0; k <= sl; k++)
                 {
                     if (!bl[k]) sl++;

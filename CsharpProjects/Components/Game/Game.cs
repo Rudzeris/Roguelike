@@ -21,6 +21,7 @@ namespace Roguelike
         public InputManager _inputManager { get; private set; }
         public InputHandler _inputHandler { get; private set; }
         public ControllerPlayer _controllerPlayer { get; private set; }
+        public ControllerEnemy _controllerEnemy { get; private set; }
         public Collision _collusion { get; private set; }
         public int getTimer() { return _timer; }
 
@@ -32,28 +33,30 @@ namespace Roguelike
             _inputManager = new InputManager(this,this);
             _map = new Map();
             _enemies = new List<Person>();
-            _player = new Player(_map.spawn_player);
+            _player = new Player(restart,_map.spawn_player);
             _controllerPlayer = new ControllerPlayer(_player, _collusion, this);
             //_arrows = new List<Arrow>();
             _drawToConsole = new Renderer(this, _map, _enemies, _player, FPS);
             _inputHandler = new InputHandler(_controllerPlayer, _inputManager);
-            _enemy_fabric = new EnemyFabric(_map,addEnemy);
+            _enemy_fabric = new EnemyFabric(removeEnemy,(IMapReader)_map, addEnemy);
             _collusion.setMapReader(_map)
                     .setPlayer(_player)
                     .setEnemies(_enemies);
+            _controllerEnemy = new ControllerEnemy(_collusion,this);
         }
 
         public void Start()
         {
             play();
             _enemies.Clear();
-            _map.recreateMap(1 + Random4ik.getRandomNumber(3, 6) * 2, 1 + Random4ik.getRandomNumber(5,12) * 2);
+            _map.recreateMap(1 + Random4ik.Next(3, 6) * 2, 1 + Random4ik.Next(5,12) * 2);
+            _enemy_fabric.createPositions();
             _player.spawn(_map.spawn_player);
             _timer = 0;
             _count_enemy_on_the_map = 5;
             for (int i = 0; i < _count_enemy_on_the_map; i++)
             {
-                //_enemy_fabric.CreateEmemy(i % 2 == 0);
+                _enemy_fabric.CreateEnemy(Random4ik.Next(2)%2 == 0 ? typeof(Archer).Name : typeof(Warrior).Name);
             }
 
         }
@@ -66,7 +69,8 @@ namespace Roguelike
                 _drawToConsole.update();
                 Thread.Sleep(1);
                 _timer++;
-
+                for(int i=0;i<_enemies.Count;i++)
+                    _controllerEnemy?.Conduct(_enemies[i]);
             }
         }
 
@@ -92,6 +96,10 @@ namespace Roguelike
         {
             if(enemy != null)
             _enemies.Add(enemy);
+        }
+        public void removeEnemy(Person? enemy)
+        {
+            _enemies.Remove(enemy);
         }
 
         //public static bool IsEnemy(Vector2 position)

@@ -8,13 +8,13 @@ namespace Roguelike {
     public static class Random4ik
     {
         static Random _rand = new Random();
-        public static int getRandomNumber(int start, int end)
+        public static int Next(int start, int end)
         {
             return _rand.Next(start,end);
         }
-        public static int getRandomNumber(int end)
+        public static int Next(int end)
         {
-            return getRandomNumber(0,end);
+            return Next(0,end);
         }
     }
 }
