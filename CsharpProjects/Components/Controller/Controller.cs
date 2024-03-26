@@ -24,7 +24,7 @@ namespace Roguelike
             switch (obj)
             {
                 case Enemy:
-                    _enemyC.Conduct((Person)obj);
+                    _enemyC.Conduct((Enemy)obj);
                     break;
                 case Arrow:
                     _weaponC.Action((Arrow)obj);

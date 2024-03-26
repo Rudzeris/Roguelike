@@ -6,9 +6,9 @@ namespace Roguelike
         public ICollision _collision;
         public Action<GameObject?> _remove;
         public Action<GameObject?> _create;
-        public uint distance_view { get; protected set; }
+        public int distance_view { get; protected set; }
 
-        protected const int _attackTime = 100;
+        protected int _attackTime = 100;
         protected int _attack = 0;
         private const int _moveTime = 80;
         private int _move = 0;

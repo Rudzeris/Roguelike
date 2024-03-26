@@ -55,8 +55,9 @@ namespace Roguelike
             return _empty;
         }
 
-        public Person? getPerson(Vector2 position)
+        public Person? getPerson(Vector2? position)
         {
+            if(position == null) return null;
             Person? person = null;
             if (_objects?.Count > 0)
                 for(int i=0;i<_objects.Count;i++)

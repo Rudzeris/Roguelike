@@ -7,25 +7,41 @@
         {
             this._collision = _collision;
         }
-        public void Conduct(Person? enemy)
+
+        private Person? Tracer(Vector2 position, KeyMode direction, int count)
+        {
+            if (count == 0) return null;
+
+            Person? pers = _collision.getPerson(position);
+            if (pers != null)
+                if (pers.GetType() == typeof(Player))
+                    return pers;
+
+            return Tracer(position + Vector2.V2Direction[(int)direction], direction, count - 1);
+        }
+
+        public void Conduct(Enemy? enemy)
         {
             if (enemy == null) return;
             bool attacked = false;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                if (!_collision.isItEmpty(enemy.position + Vector2.V2Direction[i]))
+                Person pers =
+                    Tracer(
+                        enemy.position,
+                        (KeyMode)i,
+                        enemy.distance_view
+                    );
+                if (pers != null)
                 {
-                    Person pers = _collision.getPerson(enemy.position + Vector2.V2Direction[i]);
-                    if (pers != null)
+                    if (pers.GetType() == typeof(Player))
                     {
-                        if (pers.GetType() == typeof(Player))
-                        {
-                            enemy.Attack((KeyMode)i);
-                            attacked = true;
-                            break;
-                        }
+                        enemy.Attack((KeyMode)i);
+                        attacked = true;
+                        break;
                     }
                 }
+
             }
 
             if (attacked) return;

@@ -70,20 +70,9 @@ namespace Roguelike
                 _timer++;
                 for (int i = 0; i < _objects.Count; i++)
                     _controller?.Action(_objects[i]);
-                clearWeapon();
             }
         }
 
-        private void clearWeapon()
-        {
-            if(_timer % 10 == 0)
-            for(int i=0;i< _objects.Count;i++)
-                if (_objects[i].GetType() == typeof(Weapon))
-                {
-                    _objects.RemoveAt(i);
-                    i--;
-                }
-        }
 
         public void restart()
         {

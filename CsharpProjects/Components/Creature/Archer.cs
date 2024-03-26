@@ -5,6 +5,7 @@ namespace Roguelike
     {
         public Archer(Vector2 position) : base(position, 'A')
         {
+            _attackTime = 200;
             //weapon = new Bow();
             distance_view = 5;
             defense = 0;

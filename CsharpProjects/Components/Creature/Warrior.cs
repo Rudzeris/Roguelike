@@ -6,7 +6,7 @@ namespace Roguelike
         public Warrior(Vector2 position) : base(position, 'W')
         {
             //weapon = null;
-            distance_view = 5;
+            distance_view = 2;
             defense = 0;
             damage = 1;
             maxHP = hp = 1;
