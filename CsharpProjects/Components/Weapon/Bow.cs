@@ -6,25 +6,18 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    /*public class Bow:GameObject
+    public class Bow:Weapon
     {
-
-        public uint distance_attack { get; protected set; }
-        private uint debuff = 200;
-        private uint attack_time=0;
-        public void Attack(Vector2 spawn_position,Vector2 direction, bool friend_arrow = false)
+        public Bow(Vector2 _position) : base(_position, '/', 5, 1)
         {
-            if (Game._timer-attack_time>debuff) { 
-                attack_time = Game._timer;
-                Game._arrows.Add(new Arrow(spawn_position, direction,friend_arrow));
-            }
         }
 
-        public Bow()
+        public override void Attack(KeyMode direction)
         {
-            distance_attack = 5;
-            debuff = 50;
-            attack_time=(uint)Game._rand.Next(0,200);
+            Arrow arrow = new Arrow(_create,position + Vector2.V2Direction[(int)direction]*2,direction,_distance_attack);
+            arrow._attack = _attack;
+            arrow._remove = _remove;
+            arrow._collision = _collision;
         }
-    }*/
+    }
 }

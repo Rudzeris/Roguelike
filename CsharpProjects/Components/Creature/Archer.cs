@@ -11,5 +11,17 @@ namespace Roguelike
             damage = 1;
             maxHP = hp = 1;
         }
+
+        public override void Attack(KeyMode direction)
+        {
+            if (_attack == 0)
+            {
+                weapon = new Bow(position);
+                base.Attack(direction);
+                _attack = _attackTime;
+            }
+            else
+                _attack--;
+        }
     }
 }

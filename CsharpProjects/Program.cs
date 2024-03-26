@@ -1,16 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Roguelike;
-using Microsoft.VisualBasic.FileIO;
-using System.Diagnostics.SymbolStore;
-using System.Formats.Asn1;
-using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text.Json;
 
-
-namespace Rogalic
+namespace Roguelike
 {
     public class Program
     {

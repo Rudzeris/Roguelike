@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Roguelike
 {
@@ -13,8 +14,9 @@ namespace Roguelike
         private uint _timer = 0;
 
         private readonly ITimer _Itimer;
+        private readonly IPause _Ipause;
         private readonly IMapReader _Imap;
-        private readonly List<Person> _enemies;
+        private readonly List<GameObject> _objects;
         private readonly Player _player;
 
         private char[,] _map;
@@ -22,14 +24,15 @@ namespace Roguelike
         private int _width;
         //private readonly List<GameObject> _arrows;
 
-        public Renderer(ITimer _Itimer, IMapReader _Imap,
-            List<Person> _enemies, Player _player
+        public Renderer(IPause _Ipause,ITimer _Itimer, IMapReader _Imap,
+            List<GameObject> _enemies, Player _player
             ,int _fps)
         {
+            this._Ipause = _Ipause;
             this._player = _player;
             this._Itimer = _Itimer;
             this._Imap = _Imap;
-            this._enemies = _enemies;
+            this._objects = _enemies;
             _countUpdate = (60/_fps);
             _height = _Imap.getHeight();
             _width  = _Imap.getWidth();
@@ -57,7 +60,11 @@ namespace Roguelike
 
         private void DrawInformation()
         {
-            Console.WriteLine($"Hit Point: {_player.hp}");
+            Console.Write($"Hit Point: {_player.hp}");
+            if(_Ipause.paused())
+                Console.Write("\tPress 'R' to continue");
+            Console.WriteLine();
+
         }
         private void DrawMap()
         {
@@ -88,9 +95,10 @@ namespace Roguelike
             }
             if (_player.position < new Vector2(_width,_height))
             _map[_player.position.y, _player.position.x] = _player.symbol;
-            if(_enemies.Count > 0)
-                foreach (var q in _enemies)
-                    _map[q.position.y, q.position.x] = q.symbol;
+            if(_objects.Count > 0)
+                for (int i = 0; i < _objects.Count; i++)
+                    if (_objects[i] != null)
+                        _map[_objects[i].position.y, _objects[i].position.x] = _objects[i].symbol;
         }
     }
 }

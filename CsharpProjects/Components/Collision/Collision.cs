@@ -8,7 +8,7 @@ namespace Roguelike
 {
     public class Collision : ICollision
     {
-        private List<Person>? _enemies;
+        private List<GameObject>? _objects;
         private Person? _player;
         private IMapReader? _mapReader;
 
@@ -16,17 +16,17 @@ namespace Roguelike
         {
             this._mapReader = null;
             this._player = null;
-            this._enemies = null;
+            this._objects = null;
         }
         public Collision(IMapReader _mapReader,
-            Player _player, List<Person> _enemies) {
+            Player _player, List<GameObject> _objects) {
             this._mapReader = _mapReader;
             this._player = _player;
-            this._enemies = _enemies;
+            this._objects = _objects;
         }
 
-        public Collision setEnemies(List<Person> _enemies) {
-            if (this._enemies == null) this._enemies = _enemies;
+        public Collision setEnemies(List<GameObject> _enemies) {
+            if (this._objects == null) this._objects = _enemies;
             return this;
         }
 
@@ -44,10 +44,12 @@ namespace Roguelike
         
         public bool isItEmpty(Vector2 position) {
             bool _empty = true;
-            if (_enemies == null || _mapReader == null || _player == null) return false;
-            if (_enemies?.Count > 0)
-                foreach (Person q in _enemies)
-                    if (position == q.position) _empty = false;
+            if (_objects == null || _mapReader == null || _player == null) return false;
+            if (_objects?.Count > 0)
+                for (int i = 0; i < _objects.Count; i++)
+                    if (_objects[i] != null)
+                        if (position == _objects[i].position && _objects[i].passable==false)
+                                _empty = false;
             if(!_mapReader.isItEmpty(position.x, position.y)) _empty = false;
             if(_player.position == position) _empty = false;
             return _empty;
@@ -56,9 +58,10 @@ namespace Roguelike
         public Person? getPerson(Vector2 position)
         {
             Person? person = null;
-            if (_enemies?.Count > 0)
-                foreach (Person q in _enemies)
-                    if (position == q.position) person = q;
+            if (_objects?.Count > 0)
+                for(int i=0;i<_objects.Count;i++)
+                    if (_objects[i].GetType() != typeof(Arrow))
+                        if (position == _objects[i].position) person = (Person)_objects[i];
             if(_player!=null)
             if (_player.position == position) person = _player;
             return person;

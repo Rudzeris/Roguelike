@@ -52,6 +52,10 @@ namespace Roguelike
         {
             return new Vector2(pos1.x - pos2.x, pos1.y - pos2.y);
         }
+        public static Vector2 operator *(Vector2 pos1, int num)
+        {
+            return new Vector2(pos1.x * num, pos1.y * num);
+        }
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())

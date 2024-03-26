@@ -3,15 +3,13 @@
     public class ControllerEnemy
     {
         ICollision _collision;
-        IPause _pause;
-        public ControllerEnemy(ICollision _collision, IPause _pause)
+        public ControllerEnemy(ICollision _collision)
         {
             this._collision = _collision;
-            this._pause = _pause;
         }
         public void Conduct(Person? enemy)
         {
-            if (enemy == null || _pause.paused()) return;
+            if (enemy == null) return;
             bool attacked = false;
             for(int i = 0; i < 4; i++)
             {
@@ -20,9 +18,9 @@
                     Person pers = _collision.getPerson(enemy.position + Vector2.V2Direction[i]);
                     if (pers != null)
                     {
-                        if (pers.GetType().Name == typeof(Player).Name)
+                        if (pers.GetType() == typeof(Player))
                         {
-                            enemy.Attack(pers);
+                            enemy.Attack((KeyMode)i);
                             attacked = true;
                             break;
                         }

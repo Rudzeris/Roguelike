@@ -10,7 +10,7 @@ namespace Roguelike
 {
     public class Game : ITimer, IRestart, IPause
     {
-        public List<Person> _enemies { set; get; }
+        public List<GameObject> _objects { set; get; }
         public Player _player { set; get; }
         public Renderer _drawToConsole { set; get; }
         public uint _count_enemy_on_the_map;
@@ -21,43 +21,42 @@ namespace Roguelike
         public InputManager _inputManager { get; private set; }
         public InputHandler _inputHandler { get; private set; }
         public ControllerPlayer _controllerPlayer { get; private set; }
-        public ControllerEnemy _controllerEnemy { get; private set; }
+        public Controller _controller { get; private set; }
         public Collision _collusion { get; private set; }
         public int getTimer() { return _timer; }
 
         private bool _pause;
         public Game()
         {
-            FPS = 10;
+            FPS = 40;
             _collusion = new Collision();
-            _inputManager = new InputManager(this,this);
+            _inputManager = new InputManager(this, this);
             _map = new Map();
-            _enemies = new List<Person>();
-            _player = new Player(restart,_map.spawn_player);
+            _objects = new List<GameObject>();
+            _player = new Player(restart, _map.spawn_player);
             _controllerPlayer = new ControllerPlayer(_player, _collusion, this);
-            //_arrows = new List<Arrow>();
-            _drawToConsole = new Renderer(this, _map, _enemies, _player, FPS);
+            _drawToConsole = new Renderer(this,this, _map, _objects, _player, FPS);
             _inputHandler = new InputHandler(_controllerPlayer, _inputManager);
-            _enemy_fabric = new EnemyFabric(removeEnemy,(IMapReader)_map, addEnemy);
+            _enemy_fabric = new EnemyFabric(_collusion,removeObject, (IMapReader)_map, addObject);
             _collusion.setMapReader(_map)
                     .setPlayer(_player)
-                    .setEnemies(_enemies);
-            _controllerEnemy = new ControllerEnemy(_collusion,this);
+                    .setEnemies(_objects);
+            _controller = new Controller(_collusion, this);
         }
 
         public void Start()
         {
             play();
-            _enemies.Clear();
-            _map.recreateMap(1 + Random4ik.Next(3, 6) * 2, 1 + Random4ik.Next(5,12) * 2);
+            _objects.Clear();
+            _map.recreateMap(1 + Random4ik.Next(3, 6) * 2, 1 + Random4ik.Next(5, 12) * 2);
             _enemy_fabric.createPositions();
             _player.spawn(_map.spawn_player);
             _timer = 0;
             _count_enemy_on_the_map = 5;
-            for (int i = 0; i < _count_enemy_on_the_map; i++)
-            {
-                _enemy_fabric.CreateEnemy(Random4ik.Next(2)%2 == 0 ? typeof(Archer).Name : typeof(Warrior).Name);
-            }
+
+            _enemy_fabric.CreateEnemy(typeof(Warrior).Name, 2);
+            _enemy_fabric.CreateEnemy(typeof(Archer).Name, 1);
+
 
         }
 
@@ -69,9 +68,21 @@ namespace Roguelike
                 _drawToConsole.update();
                 Thread.Sleep(1);
                 _timer++;
-                for(int i=0;i<_enemies.Count;i++)
-                    _controllerEnemy?.Conduct(_enemies[i]);
+                for (int i = 0; i < _objects.Count; i++)
+                    _controller?.Action(_objects[i]);
+                clearWeapon();
             }
+        }
+
+        private void clearWeapon()
+        {
+            if(_timer % 10 == 0)
+            for(int i=0;i< _objects.Count;i++)
+                if (_objects[i].GetType() == typeof(Weapon))
+                {
+                    _objects.RemoveAt(i);
+                    i--;
+                }
         }
 
         public void restart()
@@ -92,14 +103,15 @@ namespace Roguelike
             return _pause;
         }
 
-        public void addEnemy(Person? enemy)
+        public void addObject(GameObject? _obj)
         {
-            if(enemy != null)
-            _enemies.Add(enemy);
+            if (_obj != null)
+                _objects.Add(_obj);
         }
-        public void removeEnemy(Person? enemy)
+        public void removeObject(GameObject? _obj)
         {
-            _enemies.Remove(enemy);
+            if(_obj != null)
+                _objects.Remove(_obj);
         }
 
         //public static bool IsEnemy(Vector2 position)

@@ -7,7 +7,8 @@ namespace Roguelike
         public int hp { get; protected set; }
         public int damage { get; protected set; }
         public int defense { get; protected set; }
-        //public Bow ?weapon { get; protected set; }
+        
+        public Weapon ?weapon { get; protected set; }
 
         protected Person(Vector2 position,char symbol):
             base(position,symbol,false)
@@ -15,6 +16,10 @@ namespace Roguelike
         }
         protected abstract void Dead();
 
+        public virtual void Attack(KeyMode direction)
+        {
+
+        }
         public virtual void Attack(Person? person)
         {
             person?.TakeDamage(damage);

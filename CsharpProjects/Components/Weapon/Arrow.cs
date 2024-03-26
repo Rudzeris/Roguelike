@@ -7,62 +7,50 @@ using System.Threading.Tasks;
 
 namespace Roguelike
 {
-    /*public class Arrow : GameObject
+    public class Arrow : GameObject
     {
-        private Vector2 direction;
-
-        private bool friend_arrow;
-
-        public Arrow(Vector2 spawn_position, Vector2 direction, bool friend_arrow)
+        public ICollision _collision;
+        public Action<Person?> _attack;
+        public Action<GameObject?> _remove;
+        public int _move = 0;
+        public const int _moveTime = 60;
+        public KeyMode _direction { get; private set; } 
+        private int _distance;
+        public Arrow(Action<GameObject> _create,Vector2 _position, KeyMode _direction, int _distance):
+                base(_position,'*',true)
         {
-            this.spawn_position = spawn_position;
-            this.direction = direction;
-            symbol = '*';
-            //f = true;
-            position = spawn_position + direction;
-            this.friend_arrow = friend_arrow;
+            _create?.Invoke(this);
+            this._distance = _distance;
+            this._direction = _direction;
         }
-        public bool Move()
+        public void Move()
         {
-            if (Game.IsEnemy(position) && this.friend_arrow)
+            if (_move == 0)
             {
-                foreach (var enemy in Game._enemies)
+                if (_distance <= 0 || !_collision.isItEmpty(position))
+                    Destruct();
+                else
                 {
-                    if (enemy.position == position)
-                    {
-                        enemy.Damage();
-                    }
+                    position += Vector2.V2Direction[(int)_direction];
+                    _distance--;
                 }
-
-                Destruct();
-                return false;
+                _move = _moveTime;
             }
             else
             {
-                if (Game._player != null)
-                {
-                    if (this.position == Game._player.position && !this.friend_arrow)
-                    {
-                        Game._player?.Damage();
-                        
-                        Destruct();
-                        return false;
-                    }
-                }
-            }
-            if(Game.IsItEmpty(position + direction,false)){
-                position += direction;
-                return true;
-            }
-            else
-            {
-                Destruct();
-                return false;
+                _move--;
             }
         }
-        public void Destruct()
+        public void Destruct(){
+            _remove?.Invoke(this);
+        }
+        public void Attack(Person? person)
         {
-            Game._arrows.Remove(this);
+            if (person != null)
+            {
+                _attack?.Invoke(person);
+                Destruct();
+            }
         }
-    }*/
+    }
 }

@@ -2,16 +2,25 @@
 {
     public class EnemyFabric
     {
+        ICollision _collision;
         IMapReader _mapReader;
         List<Vector2>? _enemyPositions;
-        Action<Person?> _createEnemy;
-        Action<Person> _deleteEnemy;
-        public EnemyFabric(Action<Person> _deleteEnemy,IMapReader _mapReader, Action<Person?> _createEnemy)
+        Action<GameObject?> _create;
+        Action<GameObject?> _delete;
+        public EnemyFabric(ICollision _collision, Action<GameObject?> _delete, IMapReader _mapReader, Action<GameObject?> _create)
         {
-            this._deleteEnemy = _deleteEnemy;
-            this._createEnemy = _createEnemy;
+            this._collision = _collision;
+            this._delete = _delete;
+            this._create = _create;
             this._mapReader = _mapReader;
             _enemyPositions = null;
+        }
+
+        public void CreateEnemy(string typeEnemy, int count)
+        {
+            if (count <= 0) return;
+            for (int i = 0; i < count; i++)
+                CreateEnemy(typeEnemy);
         }
         public void CreateEnemy(string typeEnemy)
         {
@@ -23,10 +32,13 @@
                 return;
             System.Reflection.ConstructorInfo ci = type.GetConstructor(new Type[] { typeof(Vector2) });
             Enemy enemy = (Enemy)ci.Invoke(new object[] { enemy_position });
-            _createEnemy?.Invoke(enemy);
+            _create?.Invoke(enemy);
             if (enemy != null)
-                enemy._enemyDelete = _deleteEnemy;
-
+            {
+                enemy._remove = _delete;
+                enemy._create = _create;
+                enemy._collision = _collision;
+            }
         }
         private void recreatePositions()
         {
